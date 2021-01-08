@@ -2,23 +2,12 @@ import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {Provider} from 'react-redux';
 import store from './store';
-
-const MyApp = () => {
-  return (
-    <View>
-      <Text>Dogs App</Text>
-    </View>
-  );
-};
+import MainScreen from './containers/MainScreen';
 
 const App = () => (
   <Provider store={store}>
-    <MyApp />
+    <MainScreen />
   </Provider>
 );
-
-const styles = StyleSheet.create({
-  //..
-});
 
 export default App;

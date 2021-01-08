@@ -82,7 +82,7 @@ export const getAllDogs = () => (dispatch: any, getState: any) => {
           (result: Breed[], breedKey: string) => {
             const breedItem: Breed = {
               breedName: breedKey,
-              data: dogs[breedKey],
+              data: dogs[breedKey].map( (subBreed: string) => subBreed + " " + breedKey),
             };
             result.push(breedItem);
             return result;

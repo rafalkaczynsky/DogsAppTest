@@ -1,8 +1,8 @@
-import React, {ReactNode, ReactElement} from 'react';
-import {SectionList} from 'react-native';
+import React, {ReactNode, ReactElement, useEffect} from 'react';
+import {SectionList, View, Text} from 'react-native';
 
 interface GroupedBreedList {
-  sections: any;
+  groupedDogs: any;
   searchTerm: String;
   renderSectionHeader: ReactNode;
   renderItem: ReactNode;
@@ -10,33 +10,45 @@ interface GroupedBreedList {
 }
 
 const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
-  const {sections, searchTerm} = props;
+  const {groupedDogs, searchTerm} = props;
 
-  const filteredDogs = () => sections.reduce(
-    (
-      result: {breedName: any; data: any}[],
-      sectionData: {breedName: any; data: any},
-    ) => {
-      const {breedName, data} = sectionData;
 
-      const filteredData = data.filter((item: any) => {
-        let searchDataItem = breedName;
-        searchDataItem = item;
+  const filteredDogs = () =>
+    groupedDogs.reduce(
+      (
+        result: {breedName: any; data: any}[],
+        sectionData: {breedName: any; data: any},
+      ) => {
+        const {breedName, data} = sectionData;
 
-        return searchDataItem.toLowerCase().includes(searchTerm.toLowerCase());
-      });
+        const filteredData = data.filter((item: any) => {
+          let searchDataItem = breedName;
+          searchDataItem = item;
 
-      if (filteredData.length !== 0) {
-        result.push({
-          breedName,
-          data: filteredData,
+          return searchDataItem
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
         });
-      }
 
-      return result;
-    },
-    [],
-  );
+        if (filteredData.length !== 0) {
+          result.push({
+            breedName,
+            data: filteredData,
+          });
+        }
+
+        return result;
+      },
+      [],
+    );
+
+  if (!groupedDogs || groupedDogs.length === 0) {
+    return (
+      <View>
+        <Text>We're so sorry :( !But No dogs found...</Text>
+      </View>
+    );
+  }
   return <SectionList {...props} sections={filteredDogs()} />;
 };
 

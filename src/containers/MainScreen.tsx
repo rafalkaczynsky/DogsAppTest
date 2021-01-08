@@ -1,31 +1,31 @@
-import React, {useState, ReactNode, ReactElement} from 'react';
-import {View, Text, StyleSheet, SectionList, TextInput} from 'react-native';
+import React, {useState, useEffect, ReactNode, ReactElement} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SectionList,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {RootState} from '../modules/rootState';
 import {GroupedBreedList} from '../components';
+import {getAllDogs} from '../modules/dogs';
+import {Breed} from '../models';
 
 interface MainScreenProps {
-  //..
+  dogs: Breed[];
+  isLoading: boolean;
+  error: string;
+  getAllDogs: any;
 }
 
 const MainScreen = (props: MainScreenProps): ReactElement => {
-  const initialTempData = [
-    {
-      breedName: 'Breed 1',
-      data: ['Super Breed 1', 'Awesome Breed 1', 'Small Breed 1'],
-    },
-    {
-      breedName: 'Breed 2',
-      data: ['Super Breed 2', 'Awesome Breed 2', 'Small Breed 2'],
-    },
-    {
-      breedName: 'Breed 3',
-      data: ['Super Breed 1', 'Awesome Breed 1', 'Small Breed 1'],
-    },
-  ];
-
   const [searchTerm, setSearchTerm] = useState('');
-  const [data, setData] = useState(initialTempData);
+
+  useEffect(() => {
+    props.getAllDogs();
+  }, []);
 
   const renderInput = () => (
     <TextInput
@@ -36,24 +36,37 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
   );
 
   const renderSubBreadItem = ({item}: {item: String}): ReactNode => (
-    <Text style={{backgroundColor: 'red'}}>{item}</Text>
+    <Text
+      style={{
+        textTransform: 'capitalize',
+      }}>
+      {item}
+    </Text>
   );
 
   const renderBreedHeader = ({
     section: {breedName},
   }: {
     section: {breedName: String};
-  }): ReactNode => <Text style={{fontWeight: 'bold'}}>{breedName}</Text>;
+  }): ReactNode => (
+    <Text style={{fontWeight: 'bold', textTransform: 'capitalize'}}>
+      {breedName}
+    </Text>
+  );
 
   const renderList = () => (
     <GroupedBreedList
-      sections={data}
+      groupedDogs={props.dogs}
       searchTerm={searchTerm}
       renderSectionHeader={renderBreedHeader}
       renderItem={renderSubBreadItem}
       keyExtractor={(item: any) => item}
     />
   );
+
+  if (props.isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <View>
@@ -63,12 +76,14 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
   );
 };
 
-const mapStateToProps = (state: RootState): MainScreenProps => ({
-  //..
+const mapStateToProps = (state: RootState) => ({
+  dogs: state.dogs.dogs,
+  isLoading: state.dogs.isLoading,
+  error: state.dogs.error,
 });
 
-const mapDispatchToProps = (dispatch: any): MainScreenProps => ({
-  //..
+const mapDispatchToProps = (dispatch: any) => ({
+  getAllDogs: () => dispatch(getAllDogs()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

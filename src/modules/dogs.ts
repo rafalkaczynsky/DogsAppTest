@@ -1,16 +1,16 @@
 import produce from 'immer';
 
-enum DogsTypeKeys {
+export enum DogsTypeKeys {
   GET_DOGS_ATTEMPT = 'dogs/GET_DOGS_ATTEMPT',
   //...
 }
 
-interface DogsInitialState {
+export interface State {
   dogs: any[];
   isLoading: boolean;
 }
 
-const DogsInitialState = {
+export const DogsInitialState = {
   dogs: [],
   isLoading: false,
 };
@@ -19,12 +19,12 @@ export interface GetDogsAttemptAction {
   type: DogsTypeKeys.GET_DOGS_ATTEMPT;
 }
 
-type DogsActionTypes = GetDogsAttemptAction;
+export type DogsActionTypes = GetDogsAttemptAction;
 
 export default function (
-  state: DogsInitialState = DogsInitialState,
+  state: State = DogsInitialState,
   action: DogsActionTypes,
-): DogsInitialState {
+): State {
   return produce(state, (draft) => {
     switch (action.type) {
       case DogsTypeKeys.GET_DOGS_ATTEMPT:

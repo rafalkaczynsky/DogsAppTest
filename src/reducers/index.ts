@@ -1,9 +1,9 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import dogsReducer from '../modules/dogs';
 
 const appReducer = combineReducers({
-    dogs: dogsReducer,
-    //...
+  dogs: dogsReducer,
+  //...
 });
 
 export default appReducer;

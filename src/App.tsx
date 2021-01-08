@@ -1,7 +1,7 @@
-import React from 'react'
-import {StyleSheet, View, Text} from 'react-native'
-import {Provider} from 'react-redux'
-import store from './store'
+import React from 'react';
+import {StyleSheet, View, Text} from 'react-native';
+import {Provider} from 'react-redux';
+import store from './store';
 
 const MyApp = () => {
   return (

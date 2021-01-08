@@ -1,12 +1,11 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
 import {Provider} from 'react-redux';
 import store from './store';
-import MainScreen from './containers/MainScreen';
+import {AppNavigator} from './routes';
 
 const App = () => (
   <Provider store={store}>
-    <MainScreen />
+    <AppNavigator />
   </Provider>
 );
 

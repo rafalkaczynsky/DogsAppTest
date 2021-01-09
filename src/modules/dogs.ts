@@ -1,23 +1,28 @@
 import produce from 'immer';
+import {Alert} from 'react-native';
 import {Breed} from '../models';
 
 export enum DogsTypeKeys {
   GET_DOGS_ATTEMPT = 'dogs/GET_DOGS_ATTEMPT',
   GET_DOGS_SUCCESS = 'dogs/GET_DOGS_SUCCESS',
   GET_DOGS_FAILED = 'dogs/GET_DOGS_FAILED',
-  //...
+  GET_SUBBREED_IMAGE_ATTEMPT = 'dogs/GET_SUBBREED_ATTEMPT',
+  GET_SUBBREED_IMAGE_SUCCESS = 'dogs/GET_SUBBREED_SUCCESS',
+  GET_SUBBREED_IMAGE_FAILED = 'dogs/GET_SUBBREED_FAILED',
 }
 
 export interface State {
   dogs: Breed[];
   isLoading: boolean;
   error: string;
+  subBreeds: string[];
 }
 
 export const DogsInitialState = {
   dogs: [],
   isLoading: false,
   error: '',
+  subBreeds: [],
 };
 
 export interface GetDogsAttemptAction {
@@ -34,10 +39,27 @@ export interface GetDogsFailedAction {
   payload: string;
 }
 
+export interface GetSubBreedImageAttemptAction {
+  type: DogsTypeKeys.GET_SUBBREED_IMAGE_ATTEMPT;
+}
+
+export interface GetSubBreedImageSuccessAction {
+  type: DogsTypeKeys.GET_SUBBREED_IMAGE_SUCCESS;
+  payload: string;
+}
+
+export interface GetSubBreedImageFailedAction {
+  type: DogsTypeKeys.GET_SUBBREED_IMAGE_FAILED;
+  payload: string;
+}
+
 export type DogsActionTypes =
   | GetDogsAttemptAction
   | GetDogsSuccessAction
-  | GetDogsFailedAction;
+  | GetDogsFailedAction
+  | GetSubBreedImageAttemptAction
+  | GetSubBreedImageSuccessAction
+  | GetSubBreedImageFailedAction;
 
 export default function (
   state: State = DogsInitialState,
@@ -58,14 +80,67 @@ export default function (
         draft.isLoading = false;
         draft.error = action.payload;
         return draft;
+
+      case DogsTypeKeys.GET_SUBBREED_IMAGE_ATTEMPT:
+        draft.isLoading = true;
+        draft.error = '';
+        return draft;
+      case DogsTypeKeys.GET_SUBBREED_IMAGE_SUCCESS:
+        draft.isLoading = false;
+        draft.error = '';
+        draft.subBreeds = [...draft.subBreeds, action.payload];
+        return draft;
+      case DogsTypeKeys.GET_SUBBREED_IMAGE_FAILED:
+        draft.isLoading = false;
+        draft.error = action.payload;
+        return draft;
     }
   });
 }
-
+// API endpoints
 const getAllDogsUrl = 'https://dog.ceo/api/breeds/list/all';
+const getSubBreedImageUrl = (subBreed: string): string =>
+  `https://dog.ceo/api/breed/${subBreed}/images/random`;
+
+// API
+export const getSubBreedImageApi = (subBreed: string): Promise<any> => {
+  console.log('URL ', getSubBreedImageUrl(subBreed));
+  return fetch(getSubBreedImageUrl(subBreed));
+};
 
 export const getAllDogsApi = (): Promise<any> => {
   return fetch(getAllDogsUrl);
+};
+
+// Actions
+
+export const getSubBreedImage = (subBreed: string) => (
+  dispatch: any,
+  getState: any,
+) => {
+  dispatch({type: DogsTypeKeys.GET_SUBBREED_IMAGE_ATTEMPT});
+
+  const subBreedNew =
+    subBreed.trim().split(' ')[1] + '/' + subBreed.trim().split(' ')[0];
+
+  const subBreedImg = getSubBreedImageApi(subBreedNew)
+    .then((response) => response.json())
+    .then((json) => {
+      if (json.status === 'success') {
+        dispatch({
+          type: DogsTypeKeys.GET_SUBBREED_IMAGE_SUCCESS,
+          payload: json.message,
+        });
+      } 
+      return json;
+    })
+    .catch((error) => {
+      dispatch({
+        type: DogsTypeKeys.GET_SUBBREED_IMAGE_FAILED,
+        error: error.message,
+      });
+    });
+  return subBreedImg;
 };
 
 export const getAllDogs = () => (dispatch: any, getState: any) => {
@@ -82,7 +157,9 @@ export const getAllDogs = () => (dispatch: any, getState: any) => {
           (result: Breed[], breedKey: string) => {
             const breedItem: Breed = {
               breedName: breedKey,
-              data: dogs[breedKey].map( (subBreed: string) => subBreed + " " + breedKey),
+              data: dogs[breedKey].map(
+                (subBreed: string) => subBreed + ' ' + breedKey,
+              ),
             };
             result.push(breedItem);
             return result;

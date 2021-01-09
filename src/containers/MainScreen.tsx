@@ -10,14 +10,16 @@ import {
 import {connect} from 'react-redux';
 import {RootState} from '../modules/rootState';
 import {GroupedBreedList} from '../components';
-import {getAllDogs} from '../modules/dogs';
+import {getAllDogs, getSubBreedImage} from '../modules/dogs';
 import {Breed} from '../models';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface MainScreenProps {
   dogs: Breed[];
   isLoading: boolean;
   error: string;
   getAllDogs: any;
+  navigation: any; // Todo: Check for proper type
 }
 
 const MainScreen = (props: MainScreenProps): ReactElement => {
@@ -26,6 +28,10 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
   useEffect(() => {
     props.getAllDogs();
   }, []);
+
+  const handleSubBreedPressed = (item: string) =>{
+    props.navigation.navigate('SubBreedsScreen', {selectedSubBreed: item});
+  }
 
   const renderInput = () => (
     <TextInput
@@ -36,12 +42,14 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
   );
 
   const renderSubBreadItem = ({item}: {item: String}): ReactNode => (
-    <Text
-      style={{
-        textTransform: 'capitalize',
-      }}>
-      {item}
-    </Text>
+    <TouchableOpacity onPress={()=> handleSubBreedPressed(item)}>
+      <Text
+        style={{
+          textTransform: 'capitalize',
+        }}>
+        {item}
+      </Text>
+    </TouchableOpacity>
   );
 
   const renderBreedHeader = ({
@@ -67,7 +75,6 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
   if (props.isLoading) {
     return <ActivityIndicator />;
   }
-
   return (
     <View>
       {renderInput()}
@@ -83,7 +90,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  getAllDogs: () => dispatch(getAllDogs()),
+  getAllDogs: () => dispatch(getAllDogs())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

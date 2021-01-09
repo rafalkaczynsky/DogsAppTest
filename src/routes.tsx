@@ -16,9 +16,13 @@ const RootStackNavigation = createStackNavigator(
     },
     SubBreedsScreen: {
       screen: SubBreedsScreen,
-      navigationOptions: () => ({
-        title: 'Sub Breeds Screen',
-      }),
+      navigationOptions: (navigation) => {
+        const headerTitle = navigation.navigation.getParam('selectedSubBreed');
+
+        return {
+          title: headerTitle,
+        };
+      },
     },
   },
   {},

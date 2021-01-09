@@ -13,7 +13,8 @@ export enum DogsTypeKeys {
 
 export interface State {
   dogs: Breed[];
-  isLoading: boolean;
+  isLoadingDogs: boolean;
+  isLoadingImage: boolean;
   error: string;
   subBreeds: string[];
 }
@@ -68,30 +69,29 @@ export default function (
   return produce(state, (draft) => {
     switch (action.type) {
       case DogsTypeKeys.GET_DOGS_ATTEMPT:
-        draft.isLoading = true;
+        draft.isLoadingDogs = true;
         draft.error = '';
         return draft;
       case DogsTypeKeys.GET_DOGS_SUCCESS:
-        draft.isLoading = false;
+        draft.isLoadingDogs = false;
         draft.error = '';
         draft.dogs = [...action.payload];
         return draft;
       case DogsTypeKeys.GET_DOGS_FAILED:
-        draft.isLoading = false;
+        draft.isLoadingDogs = false;
         draft.error = action.payload;
         return draft;
-
       case DogsTypeKeys.GET_SUBBREED_IMAGE_ATTEMPT:
-        draft.isLoading = true;
+        draft.isLoadingImage = true;
         draft.error = '';
         return draft;
       case DogsTypeKeys.GET_SUBBREED_IMAGE_SUCCESS:
-        draft.isLoading = false;
+        draft.isLoadingImage = false;
         draft.error = '';
         draft.subBreeds = [...draft.subBreeds, action.payload];
         return draft;
       case DogsTypeKeys.GET_SUBBREED_IMAGE_FAILED:
-        draft.isLoading = false;
+        draft.isLoadingImage = false;
         draft.error = action.payload;
         return draft;
     }
@@ -113,7 +113,6 @@ export const getAllDogsApi = (): Promise<any> => {
 };
 
 // Actions
-
 export const getSubBreedImage = (subBreed: string) => (
   dispatch: any,
   getState: any,

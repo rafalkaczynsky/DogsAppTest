@@ -8,7 +8,7 @@ import {
   SectionItem,
   ListHeader,
   Container,
-  SearchBox
+  SearchBox,
 } from '../components/Core';
 import {getAllDogs} from '../modules/dogs';
 import {Breed} from '../models';
@@ -64,18 +64,17 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
 
   const renderList = () => (
     <View style={{flex: 1}}>
-    <GroupedBreedList
-      styles={{backgroundColor: 'yellow'}}
-      groupedDogs={props.dogs}
-      searchTerm={searchTerm}
-      renderSectionHeader={renderBreedHeader}
-      renderItem={renderSubBreadItem}
-      keyExtractor={(item: any) => item}
-      ItemSeparatorComponent={renderItemSeparator}
-      ListHeaderComponent={renderListHeader}
-    />
+      <GroupedBreedList
+        styles={{backgroundColor: 'yellow'}}
+        groupedDogs={props.dogs}
+        searchTerm={searchTerm}
+        renderSectionHeader={renderBreedHeader}
+        renderItem={renderSubBreadItem}
+        keyExtractor={(item: any) => item}
+        ItemSeparatorComponent={renderItemSeparator}
+        ListHeaderComponent={renderListHeader}
+      />
     </View>
-
   );
 
   const renderLoading = (): ReactNode => (
@@ -93,7 +92,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
 
 const mapStateToProps = (state: RootState) => ({
   dogs: state.dogs.dogs,
-  isLoading: state.dogs.isLoading,
+  isLoading: state.dogs.isLoadingDogs,
   error: state.dogs.error,
 });
 

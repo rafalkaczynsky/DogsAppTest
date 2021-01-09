@@ -108,7 +108,7 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
 
 const mapStateToProps = (state: RootState) => ({
   images: state.dogs.subBreeds,
-  isLoading: state.dogs.isLoading,
+  isLoading: state.dogs.isLoadingImage,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

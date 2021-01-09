@@ -1,5 +1,7 @@
 import React, {ReactNode, ReactElement, useEffect} from 'react';
 import {SectionList, View, Text} from 'react-native';
+import Palette from '../styles/palette';
+import {BaseText} from './Core';
 
 interface GroupedBreedList {
   styles?: any;
@@ -48,7 +50,7 @@ const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
   if (!groupedDogs || groupedDogs.length === 0) {
     return (
       <View>
-        <Text>We're so sorry :( but no dogs found...</Text>
+        <BaseText size={18} color={Palette.darkest} >Waiting for results ...</BaseText>
       </View>
     );
   }

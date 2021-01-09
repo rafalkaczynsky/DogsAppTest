@@ -3,7 +3,7 @@ import {View, Image, ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import {getSubBreedImage} from '../modules/dogs';
 import {RootState} from '../modules/rootState';
-import Container from '../components/Container';
+import {Container} from '../components/Core';
 import Palette from '../styles/palette';
 
 interface SubBreedsScreenProps {
@@ -77,12 +77,14 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
   const renderImages = () =>
     subBreedImages.map((imageUrl) => (
       <Image
+        key={imageUrl}
         style={{width: 100, height: 100}}
         source={{
           uri: imageUrl,
         }}
       />
     ));
+
   return (
     <Container>
       {props.isLoading && renderLoading()}

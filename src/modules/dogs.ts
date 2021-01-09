@@ -1,6 +1,6 @@
 import produce from 'immer';
-import {Alert} from 'react-native';
 import {Breed} from '../models';
+import { RootState } from './rootState';
 
 export enum DogsTypeKeys {
   GET_DOGS_ATTEMPT = 'dogs/GET_DOGS_ATTEMPT',
@@ -9,6 +9,7 @@ export enum DogsTypeKeys {
   GET_SUBBREED_IMAGE_ATTEMPT = 'dogs/GET_SUBBREED_ATTEMPT',
   GET_SUBBREED_IMAGE_SUCCESS = 'dogs/GET_SUBBREED_SUCCESS',
   GET_SUBBREED_IMAGE_FAILED = 'dogs/GET_SUBBREED_FAILED',
+  CLEAR_CACHED_IMAGES = 'dogs/CLEAR_CACHED_IMAGES',
 }
 
 export interface State {
@@ -21,7 +22,8 @@ export interface State {
 
 export const DogsInitialState = {
   dogs: [],
-  isLoading: false,
+  isLoadingDogs: false,
+  isLoadingImage: false,
   error: '',
   subBreeds: [],
 };
@@ -54,13 +56,18 @@ export interface GetSubBreedImageFailedAction {
   payload: string;
 }
 
+export interface ClearCachedImagesAction {
+  type: DogsTypeKeys.CLEAR_CACHED_IMAGES;
+  payload: string;
+}
 export type DogsActionTypes =
   | GetDogsAttemptAction
   | GetDogsSuccessAction
   | GetDogsFailedAction
   | GetSubBreedImageAttemptAction
   | GetSubBreedImageSuccessAction
-  | GetSubBreedImageFailedAction;
+  | GetSubBreedImageFailedAction
+  | ClearCachedImagesAction;
 
 export default function (
   state: State = DogsInitialState,
@@ -94,6 +101,13 @@ export default function (
         draft.isLoadingImage = false;
         draft.error = action.payload;
         return draft;
+      case DogsTypeKeys.CLEAR_CACHED_IMAGES:
+        draft.subBreeds = draft.subBreeds.filter((imageUrl) => {
+          const breedFull = action.payload.split(' ');
+          const mainBreed = breedFull[0];
+          return !imageUrl.includes(mainBreed);
+        });
+        return draft;
     }
   });
 }
@@ -114,9 +128,9 @@ export const getAllDogsApi = (): Promise<any> => {
 
 // Actions
 export const getSubBreedImage = (subBreed: string) => (
-  dispatch: any,
-  getState: any,
+  dispatch: any
 ) => {
+  
   dispatch({type: DogsTypeKeys.GET_SUBBREED_IMAGE_ATTEMPT});
 
   const subBreedNew =
@@ -130,7 +144,7 @@ export const getSubBreedImage = (subBreed: string) => (
           type: DogsTypeKeys.GET_SUBBREED_IMAGE_SUCCESS,
           payload: json.message,
         });
-      } 
+      }
       return json;
     })
     .catch((error) => {
@@ -142,7 +156,7 @@ export const getSubBreedImage = (subBreed: string) => (
   return subBreedImg;
 };
 
-export const getAllDogs = () => (dispatch: any, getState: any) => {
+export const getAllDogs = () => (dispatch: any) => {
   dispatch({type: DogsTypeKeys.GET_DOGS_ATTEMPT});
 
   const dogs = getAllDogsApi()
@@ -176,4 +190,8 @@ export const getAllDogs = () => (dispatch: any, getState: any) => {
       dispatch({type: DogsTypeKeys.GET_DOGS_FAILED, error: error.message});
     });
   return dogs;
+};
+
+export const clearCachedSubBreed = (subBreed: string) => (dispatch: any) => {
+  dispatch({type: DogsTypeKeys.CLEAR_CACHED_IMAGES, payload: subBreed});
 };

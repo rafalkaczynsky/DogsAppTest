@@ -1,17 +1,19 @@
-import React, {ReactElement, useEffect, useState} from 'react';
-import {ActivityIndicator} from 'react-native';
+import React, {ReactElement, useCallback, useEffect, useState} from 'react';
+import {ActivityIndicator, RefreshControl, View} from 'react-native';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import ProgressBar from 'react-native-progress/Bar';
 import {createImageProgress} from 'react-native-image-progress';
-import {getSubBreedImage} from '../modules/dogs';
+import {clearCachedSubBreed, getSubBreedImage} from '../modules/dogs';
 import {RootState} from '../modules/rootState';
 import {Container, ImageCard} from '../components/Core';
 import Palette from '../styles/palette';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Image = createImageProgress(FastImage);
 
 interface SubBreedsScreenProps {
+  clearCachedSubBreed: (selectedBreedFromParam: string) => void;
   getSubBreedImage: (selectedBreedFromParam: string) => void;
   navigation: any;
   images: string[];
@@ -21,6 +23,17 @@ interface SubBreedsScreenProps {
 
 const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
   const [subBreedImages, setSubBreedImages] = useState<string[]>([]);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const onRefresh = useCallback(() => {
+    const {clearCachedSubBreed} = props;
+    const selectedBreedFromParam: string = props.navigation.getParam(
+      'selectedSubBreed',
+    );
+    setRefreshing(true);
+    clearCachedSubBreed(selectedBreedFromParam);
+    setNewImagesForSubBreed(selectedBreedFromParam);
+  }, []);
 
   useEffect(() => {
     const selectedBreedFromParam: string = props.navigation.getParam(
@@ -34,10 +47,9 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
   }, []);
 
   const setNewImagesForSubBreed = (selectedBreedFromParam: string): void => {
-    const getFirstSubreedImage = props.getSubBreedImage(selectedBreedFromParam);
-    const getSecondSubreedImage = props.getSubBreedImage(
-      selectedBreedFromParam,
-    );
+    const {getSubBreedImage} = props;
+    const getFirstSubreedImage = getSubBreedImage(selectedBreedFromParam);
+    const getSecondSubreedImage = getSubBreedImage(selectedBreedFromParam);
 
     let newImages: string[] = [];
     Promise.all([getFirstSubreedImage, getSecondSubreedImage]).then(
@@ -50,6 +62,7 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
         });
 
         setSubBreedImages(newImages);
+        setRefreshing(false);
       },
     );
   };
@@ -74,33 +87,44 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
     return storedImages;
   };
 
-  const renderLoading = () => (
-    <ActivityIndicator color={Palette.brand} size={'large'} />
+  const renderLoading = (): ReactElement => (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <ActivityIndicator color={Palette.brand} size={'large'} />
+    </View>
   );
 
-  const renderImages = () =>
-    subBreedImages.map((imageUrl) => (
-      <ImageCard>
-        <Image
-          style={{width: '100%', height: '100%'}}
-          source={{
-            uri: imageUrl,
-          }}
-          threshold={0}
-          indicator={ProgressBar}
-          indicatorProps={{
-            size: 80,
-            borderWidth: 0,
-            color: Palette.brand,
-            unfilledColor: 'rgba(200, 200, 200, 0.2)',
-          }}
-        />
-      </ImageCard>
-    ));
+  const renderImages = () => (
+    <ScrollView
+      contentContainerStyle={{
+        flex: 1,
+      }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      {subBreedImages.map((imageUrl: any) => (
+        <ImageCard>
+          <Image
+            style={{width: '100%', height: '100%'}}
+            source={{
+              uri: imageUrl,
+            }}
+            threshold={0}
+            indicator={ProgressBar}
+            indicatorProps={{
+              size: 80,
+              borderWidth: 0,
+              color: Palette.brand,
+              unfilledColor: 'rgba(200, 200, 200, 0.2)',
+            }}
+          />
+        </ImageCard>
+      ))}
+    </ScrollView>
+  );
 
   return (
     <Container>
-      {props.isLoading && renderLoading()}
+      {props.isLoading && !refreshing && renderLoading()}
       {subBreedImages.length > 0 && renderImages()}
     </Container>
   );
@@ -113,6 +137,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
   getSubBreedImage: (subBreed: string) => dispatch(getSubBreedImage(subBreed)),
+  clearCachedSubBreed: (subBreed: string) =>
+    dispatch(clearCachedSubBreed(subBreed)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubBreedsScreen);

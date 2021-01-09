@@ -17,7 +17,6 @@ interface GroupedBreedList {
 const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
   const {groupedDogs, searchTerm} = props;
 
-
   const filteredDogs = () =>
     groupedDogs.reduce(
       (
@@ -50,7 +49,9 @@ const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
   if (!groupedDogs || groupedDogs.length === 0) {
     return (
       <View>
-        <BaseText size={18} color={Palette.darkest} >Waiting for results ...</BaseText>
+        <BaseText size={'18px'} color={Palette.darkest}>
+          Waiting for results ...
+        </BaseText>
       </View>
     );
   }

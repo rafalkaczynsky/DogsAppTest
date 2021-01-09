@@ -78,7 +78,9 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
   );
 
   const renderLoading = (): ReactNode => (
-    <ActivityIndicator color={Palette.brand} size={'large'} />
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <ActivityIndicator color={Palette.brand} size={'large'} />
+    </View>
   );
 
   return (

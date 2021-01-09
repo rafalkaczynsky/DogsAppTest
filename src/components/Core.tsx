@@ -60,3 +60,13 @@ export const SearchBox = React.memo(withProps()(
 `);
 
 SearchBox.displayName = 'SearchBox';
+
+export const ImageCard = React.memo(styled(View)`
+  flex: 1;
+  padding: 10px;
+  borderRadius: 6px;
+  margin: 10px;
+  background-color: ${Palette.accent};
+`);
+
+ImageCard.displayName = 'ImageCard';

@@ -1,18 +1,13 @@
 import React, {useState, useEffect, ReactNode, ReactElement} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SectionList,
-  TextInput,
-  ActivityIndicator,
-} from 'react-native';
+import {View, TextInput, ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import {RootState} from '../modules/rootState';
-import {GroupedBreedList} from '../components';
-import {getAllDogs, getSubBreedImage} from '../modules/dogs';
+import {GroupedBreedList, Container, BaseText} from '../components';
+import {getAllDogs} from '../modules/dogs';
 import {Breed} from '../models';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import Palette from '../styles/palette';
+import styles from '../styles/base';
 
 interface MainScreenProps {
   dogs: Breed[];
@@ -29,26 +24,21 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     props.getAllDogs();
   }, []);
 
-  const handleSubBreedPressed = (item: string) =>{
+  const handleSubBreedPressed = (item: string) => {
     props.navigation.navigate('SubBreedsScreen', {selectedSubBreed: item});
-  }
+  };
 
-  const renderInput = () => (
+  const renderSearchBox = () => (
     <TextInput
-      style={{}}
+      style={styles.searchBox}
       placeholder={'Search for dogs ...'}
       onChangeText={(txt) => setSearchTerm(txt)}
     />
   );
 
   const renderSubBreadItem = ({item}: {item: String}): ReactNode => (
-    <TouchableOpacity onPress={()=> handleSubBreedPressed(item)}>
-      <Text
-        style={{
-          textTransform: 'capitalize',
-        }}>
-        {item}
-      </Text>
+    <TouchableOpacity onPress={() => handleSubBreedPressed(item)}>
+      <BaseText style={styles.sectionItem}>{item}</BaseText>
     </TouchableOpacity>
   );
 
@@ -56,30 +46,41 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     section: {breedName},
   }: {
     section: {breedName: String};
-  }): ReactNode => (
-    <Text style={{fontWeight: 'bold', textTransform: 'capitalize'}}>
-      {breedName}
-    </Text>
+  }): ReactElement => (
+    <BaseText style={styles.sectionHeader}>{breedName}</BaseText>
+  );
+
+  const renderItemSeparator = (): ReactNode => (
+    <View style={styles.itemSeparator} />
+  );
+
+  const renderListHeader = (): ReactNode => (
+    <BaseText style={styles.listHeader}>Results: </BaseText>
   );
 
   const renderList = () => (
     <GroupedBreedList
+      styles={{backgroundColor: 'yellow'}}
       groupedDogs={props.dogs}
       searchTerm={searchTerm}
       renderSectionHeader={renderBreedHeader}
       renderItem={renderSubBreadItem}
       keyExtractor={(item: any) => item}
+      ItemSeparatorComponent={renderItemSeparator}
+      ListHeaderComponent={renderListHeader}
     />
   );
 
-  if (props.isLoading) {
-    return <ActivityIndicator />;
-  }
+  const renderLoading = (): ReactNode => (
+    <ActivityIndicator color={Palette.brand} size={'large'} />
+  );
+
   return (
-    <View>
-      {renderInput()}
+    <Container>
+      {renderSearchBox()}
+      {props.isLoading && renderLoading()}
       {renderList()}
-    </View>
+    </Container>
   );
 };
 
@@ -90,11 +91,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  getAllDogs: () => dispatch(getAllDogs())
+  getAllDogs: () => dispatch(getAllDogs()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
-
-const styles = StyleSheet.create({
-  //..
-});

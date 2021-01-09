@@ -1,8 +1,10 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Image, ActivityIndicator} from 'react-native';
+import {View, Image, ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import {getSubBreedImage} from '../modules/dogs';
 import {RootState} from '../modules/rootState';
+import Container from '../components/Container';
+import Palette from '../styles/palette';
 
 interface SubBreedsScreenProps {
   getSubBreedImage: (selectedBreedFromParam: string) => void;
@@ -68,22 +70,24 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
     return storedImages;
   };
 
-  if (props.isLoading) {
-    return <ActivityIndicator color={'black'} size={'large'} />;
-  }
+  const renderLoading = () => (
+    <ActivityIndicator color={Palette.brand} size={'large'} />
+  );
 
+  const renderImages = () =>
+    subBreedImages.map((imageUrl) => (
+      <Image
+        style={{width: 100, height: 100}}
+        source={{
+          uri: imageUrl,
+        }}
+      />
+    ));
   return (
-    <View>
-      {subBreedImages.length > 0 &&
-        subBreedImages.map((imageUrl) => (
-          <Image
-            style={{width: 100, height: 100}}
-            source={{
-              uri: imageUrl,
-            }}
-          />
-        ))}
-    </View>
+    <Container>
+      {props.isLoading && renderLoading()}
+      {subBreedImages.length > 0 && renderImages()}
+    </Container>
   );
 };
 
@@ -97,7 +101,3 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubBreedsScreen);
-
-const styles = StyleSheet.create({
-  //..
-});

@@ -2,11 +2,14 @@ import React, {ReactNode, ReactElement, useEffect} from 'react';
 import {SectionList, View, Text} from 'react-native';
 
 interface GroupedBreedList {
+  styles?: any;
   groupedDogs: any;
   searchTerm: String;
   renderSectionHeader: ReactNode;
   renderItem: ReactNode;
   keyExtractor: any;
+  ItemSeparatorComponent: ReactNode;
+  ListHeaderComponent: ReactNode;
 }
 
 const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
@@ -45,7 +48,7 @@ const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
   if (!groupedDogs || groupedDogs.length === 0) {
     return (
       <View>
-        <Text>We're so sorry :( !But No dogs found...</Text>
+        <Text>We're so sorry :( but no dogs found...</Text>
       </View>
     );
   }

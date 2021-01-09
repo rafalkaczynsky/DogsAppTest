@@ -1,5 +1,5 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import ProgressBar from 'react-native-progress/Bar';
@@ -8,7 +8,6 @@ import {getSubBreedImage} from '../modules/dogs';
 import {RootState} from '../modules/rootState';
 import {Container, ImageCard} from '../components/Core';
 import Palette from '../styles/palette';
-import {ScrollView} from 'react-native-gesture-handler';
 
 const Image = createImageProgress(FastImage);
 
@@ -21,7 +20,7 @@ interface SubBreedsScreenProps {
 }
 
 const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
-  const [subBreedImages, setSubBreedImages] = useState([]);
+  const [subBreedImages, setSubBreedImages] = useState<string[]>([]);
 
   useEffect(() => {
     const selectedBreedFromParam: string = props.navigation.getParam(
@@ -59,14 +58,13 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
     selectedBreedFromParam: string,
   ): string[] => {
     const images: string[] = props.images;
-
     const breedFull: string[] = selectedBreedFromParam.split(' ');
     const mainBreed: string = breedFull[0];
     const subBreed: string = breedFull[1];
 
     let storedImages: string[] = [];
 
-    images.forEach((image: string) => {
+    images.forEach((image: string): void => {
       if (image.includes(mainBreed) && image.includes(subBreed)) {
         storedImages.push(image);
         setSubBreedImages(storedImages);

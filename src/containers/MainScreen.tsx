@@ -25,7 +25,7 @@ interface MainScreenProps {
 }
 
 const MainScreen = (props: MainScreenProps): ReactElement => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
     props.getAllDogs();

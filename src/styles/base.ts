@@ -23,10 +23,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: '100%',
   },
+  fastImage: {width: '100%', height: '100%'},
 });
 
 export default styles;
-
-// Background Color: appBackground Blue: brand
-// Section Head: darkest Section Item: lightest
-// Base Font Sizes: Title: 24 Sections: 18

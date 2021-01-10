@@ -11,15 +11,17 @@ import React, {
     Container
   } from '../components/Core';
 import { decreaseFontSize, increaseFontSize } from '../modules/settings';
-import Palette from '../styles/palette';
   
-  interface MainScreenProps {
+  interface SettingsScreenProps {
     increaseFontSize:()=> void;
     decreaseFontSize: () => void;
     fontSize: number;
   }
   
-  const SettingsScreen = (props: MainScreenProps): ReactElement => {
+// This component is a settings screen of our App.
+// SettingScren is giving an direct access to customize an app
+// Work in progress ...
+  const SettingsScreen = (props: SettingsScreenProps): ReactElement => {
     const {increaseFontSize, decreaseFontSize, fontSize} = props;
 
     const renderButton = (txt:string, callback: ()=> void) => (

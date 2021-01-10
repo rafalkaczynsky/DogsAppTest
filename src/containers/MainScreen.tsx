@@ -29,10 +29,11 @@ interface MainScreenProps {
   dogs: Breed[];
   isLoading: boolean;
   error: string;
-  navigation: any; // Todo: Check for proper type
+  navigation: any;
   getAllDogs: () => Promise<string[]>;
 }
-
+// This component is a home screen of our App.
+// MainScreen is displaying list of dogs grouped by breed with its subreeds
 const MainScreen = (props: MainScreenProps): ReactElement => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -43,6 +44,10 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     !dogs.length ? getAllDogs() : null;
   }, []);
 
+  /**
+   * This method is handling processes when onRefresh is pulled down
+   * Is fetching main breed list from API
+   */
   const handleOnRefresh = () => {
     setRefreshing(true);
     getAllDogs()
@@ -52,11 +57,20 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
         setRefreshing(false);
       });
   };
+  /**
+   * @param {item} string selected sub breed name
+   * This method is triggered when sub breed item is pressed
+   * Once pressed navigate to SubBreedsScreen
+   */
   const handleSubBreedPressed = (item: string) => {
     navigation.navigate('SubBreedsScreen', {selectedSubBreed: item});
   };
 
   const onRefresh = useCallback(handleOnRefresh, []);
+
+  /**
+   * Render Methods of MainScreen component
+   */
 
   const renderSearchBox = () => (
     <SearchBox
@@ -66,7 +80,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     />
   );
 
-  const renderSubBreadItem = ({item}: {item: String}): ReactNode => (
+  const renderSubBreadItem = ({item}: {item: string}): ReactNode => (
     <TouchableOpacity onPress={() => handleSubBreedPressed(item)}>
       <SectionItem size={fontSize}>{item}</SectionItem>
     </TouchableOpacity>
@@ -76,7 +90,9 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     section: {breedName},
   }: {
     section: {breedName: String};
-  }): ReactElement => <SectionHeader size={fontSize}>{breedName}</SectionHeader>;
+  }): ReactElement => (
+    <SectionHeader size={fontSize}>{breedName}</SectionHeader>
+  );
 
   const renderItemSeparator = (): ReactNode => (
     <View style={styles.itemSeparator} />
@@ -124,7 +140,7 @@ const mapStateToProps = (state: RootState) => ({
   dogs: state.dogs.dogs,
   isLoading: state.dogs.isLoadingDogs,
   error: state.dogs.error,
-  fontSize: state.settings.fontSize
+  fontSize: state.settings.fontSize,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

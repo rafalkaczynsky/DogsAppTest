@@ -7,7 +7,8 @@ import React, {
   import {
     MainContainer,
     BaseText,
-    Button
+    Button,
+    Container
   } from '../components/Core';
 import { decreaseFontSize, increaseFontSize } from '../modules/settings';
 import Palette from '../styles/palette';
@@ -27,12 +28,17 @@ import Palette from '../styles/palette';
       </Button>
     )
 
+    const renderFontSizeLabel = (): ReactElement => (
+      <Container>
+        <BaseText size={fontSize} center darkMode>Current Font Size: {fontSize}</BaseText>
+      </Container>
+    )
+
     return (
       <MainContainer>
         {renderButton('Increase (max: 30)', increaseFontSize)}
         {renderButton('Decrease (min: 10)', decreaseFontSize)}
-        <BaseText size={fontSize} center darkMode>Current Font Size: {fontSize}</BaseText>
-
+        {renderFontSizeLabel()}
       </MainContainer>
     );
   };

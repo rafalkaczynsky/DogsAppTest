@@ -34,7 +34,7 @@ export const BaseText = React.memo(withProps()(styled(Text))`
   text-align: ${({center}) => (center ? 'center' : 'auto')};
   flex-wrap: wrap;
   letter-spacing: 1.2px;
-  padding: 16px;
+  text-align-vertical: center;
   font-size: ${({size}) => (size ? size + 'px' : '18px')};
 `);
 
@@ -42,6 +42,7 @@ BaseText.displayName = 'BaseText';
 
 export const SectionHeader = React.memo(styled(BaseText)`
   font-weight: bold;
+  padding: 16px;
   text-transform: capitalize;
   background-color: ${Palette.accent};
 `);
@@ -49,6 +50,7 @@ export const SectionHeader = React.memo(styled(BaseText)`
 SectionHeader.displayName = 'SectionHeader';
 
 export const SectionItem = React.memo(styled(BaseText)`
+  padding: 16px;
   text-transform: capitalize;
   background-color: ${Palette.darkest};
   padding-left: 30px;
@@ -58,6 +60,7 @@ SectionItem.displayName = 'SectionItem';
 
 export const ListHeader = React.memo(styled(BaseText)`
   padding-left: 0px;
+  padding-bottom: 10px;
   color: ${Palette.darkest};
 `);
 
@@ -89,7 +92,11 @@ ImageCard.displayName = 'ImageCard';
 export const Button = React.memo(
   styled(TouchableOpacity)`
     margin-bottom: 5px;
+    justify-content: center;
+    align-items: center;
     background-color: ${Palette.brand};
+    padding: 7px;
+    margin: 5px;
   `,
 );
 

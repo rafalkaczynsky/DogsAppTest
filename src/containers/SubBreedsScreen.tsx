@@ -16,6 +16,7 @@ import Palette from '../styles/palette';
 import {ScrollView} from 'react-native-gesture-handler';
 import {hasData} from '../utils/utils';
 import styles from '../styles/base';
+import { LoadingIndicator } from '../components';
 
 const Image = createImageProgress(FastImage);
 
@@ -141,11 +142,7 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
    * Render Methods of SubBreedsScreen component
    */
 
-  const renderLoading = (): ReactElement => (
-    <Container>
-      <ActivityIndicator color={Palette.brand} size={'large'} />
-    </Container>
-  );
+  const renderLoading = (): ReactElement => <LoadingIndicator/>
 
   const renderImages = (): ReactElement => (
     <ScrollView

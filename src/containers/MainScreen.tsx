@@ -8,7 +8,7 @@ import React, {
 import {View, ActivityIndicator, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 import {RootState} from '../modules/rootState';
-import {GroupedBreedList} from '../components';
+import {GroupedBreedList, LoadingIndicator} from '../components';
 import {
   SectionHeader,
   SectionItem,
@@ -121,11 +121,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     </BaseContainer>
   );
 
-  const renderLoading = (): ReactNode => (
-    <Container>
-      <ActivityIndicator color={Palette.brand} size={'large'} />
-    </Container>
-  );
+  const renderLoading = (): ReactElement => <LoadingIndicator/>
 
   return (
     <MainContainer>

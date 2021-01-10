@@ -9,7 +9,8 @@ interface GroupedBreedList {
   searchTerm: String;
   renderSectionHeader: ReactNode;
   renderItem: ReactNode;
-  keyExtractor: any;
+  keyExtractor: (item: any)=> void;
+  initialNumToRender: number;
   ItemSeparatorComponent: ReactNode;
   ListHeaderComponent: ReactNode;
 }

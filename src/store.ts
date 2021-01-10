@@ -1,8 +1,10 @@
 import thunk from 'redux-thunk';
-import {createStore, applyMiddleware, compose} from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import {createLogger} from 'redux-logger';
-import appReducer from './reducers';
 import {composeWithDevTools} from 'redux-devtools-extension';
+import { persistReducer, persistStore, Persistor } from 'redux-persist';
+import appReducer from './reducers';
+import { persistConfig } from './persist';
 
 const isDebuggingInChrome = __DEV__ ? true : false;
 
@@ -20,6 +22,7 @@ if (__DEV__) {
 }
 
 const middleware = applyMiddleware(...allMiddleware);
-const store = createStore(appReducer, {}, composeWithDevTools(middleware));
+const persistedReducer = persistReducer(persistConfig, appReducer);
 
-export default store;
+export const store = createStore(persistedReducer, {}, composeWithDevTools(middleware));
+export let persistor: Persistor | undefined = persistStore(store);

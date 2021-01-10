@@ -20,8 +20,8 @@ interface MainScreenProps {
   dogs: Breed[];
   isLoading: boolean;
   error: string;
-  getAllDogs: any;
   navigation: any; // Todo: Check for proper type
+  getAllDogs: ()=> void;
 }
 
 const MainScreen = (props: MainScreenProps): ReactElement => {
@@ -62,7 +62,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     <ListHeader size={'18px'}>Results: </ListHeader>
   );
 
-  const renderList = () => (
+  const renderList = (): ReactElement => (
     <View style={{flex: 1}}>
       <GroupedBreedList
         styles={{backgroundColor: 'yellow'}}
@@ -71,6 +71,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
         renderSectionHeader={renderBreedHeader}
         renderItem={renderSubBreadItem}
         keyExtractor={(item: any) => item}
+        initialNumToRender={10}
         ItemSeparatorComponent={renderItemSeparator}
         ListHeaderComponent={renderListHeader}
       />

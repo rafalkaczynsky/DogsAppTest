@@ -93,7 +93,7 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
     </View>
   );
 
-  const renderImages = () => (
+  const renderImages = (): ReactElement => (
     <ScrollView
       contentContainerStyle={{
         flex: 1,

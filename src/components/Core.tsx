@@ -1,7 +1,6 @@
 import React, {ReactElement} from 'react';
 import {Text, TextInput, View, Platform } from 'react-native';
 import styled from 'styled-components';
-import Styles from '../styles/base';
 import Palette from '../styles/palette';
 import {withProps} from '../helpers';
 import {TouchableOpacity} from 'react-native-gesture-handler';

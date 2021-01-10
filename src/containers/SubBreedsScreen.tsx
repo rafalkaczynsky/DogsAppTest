@@ -1,4 +1,4 @@
-import React, {ReactElement, useCallback, useEffect, useState} from 'react';
+import React, {ReactElement, useCallback, useEffect, useState, View} from 'react';
 import {RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';

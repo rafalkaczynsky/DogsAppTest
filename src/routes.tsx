@@ -14,7 +14,7 @@ const RootStackNavigation = createStackNavigator(
   {
     MainSearchScreen: {
       screen: MainScreen,
-      navigationOptions: (navigation) => ({
+      navigationOptions: (navigation: any) => ({
         title: 'Main Screen',
         headerRight: (
           <SettingsButton navigation={navigation}/>
@@ -23,7 +23,7 @@ const RootStackNavigation = createStackNavigator(
     },
     SubBreedsScreen: {
       screen: SubBreedsScreen,
-      navigationOptions: (navigation) => {
+      navigationOptions: (navigation: any) => {
         const headerTitle = navigation.navigation.getParam('selectedSubBreed');
         return {
           title: headerTitle,

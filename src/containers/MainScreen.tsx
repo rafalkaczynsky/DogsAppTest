@@ -13,7 +13,6 @@ import {
   SectionHeader,
   SectionItem,
   ListHeader,
-  Container,
   SearchBox,
   MainContainer,
   BaseContainer,
@@ -21,7 +20,6 @@ import {
 import {getAllDogs} from '../modules/dogs';
 import {Breed} from '../models';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import Palette from '../styles/palette';
 import styles from '../styles/base';
 
 interface MainScreenProps {

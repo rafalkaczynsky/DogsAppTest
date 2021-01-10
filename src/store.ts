@@ -1,5 +1,5 @@
-import thunk from 'redux-thunk';
-import { createStore, applyMiddleware } from 'redux';
+import thunk, { ThunkMiddleware } from 'redux-thunk';
+import { createStore, applyMiddleware, AnyAction } from 'redux';
 import {createLogger} from 'redux-logger';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import { persistReducer, persistStore, Persistor } from 'redux-persist';

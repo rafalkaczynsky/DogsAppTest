@@ -6,9 +6,10 @@ import ProgressBar from 'react-native-progress/Bar';
 import {createImageProgress} from 'react-native-image-progress';
 import {clearCachedSubBreed, getSubBreedImage} from '../modules/dogs';
 import {RootState} from '../modules/rootState';
-import {BaseText, Container, ImageCard} from '../components/Core';
+import {BaseText, Container, ImageCard, MainContainer} from '../components/Core';
 import Palette from '../styles/palette';
 import {ScrollView} from 'react-native-gesture-handler';
+import { hasData } from '../utils/utils';
 
 const Image = createImageProgress(FastImage);
 
@@ -27,37 +28,35 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const {
     clearCachedSubBreed,
+    getSubBreedImage,
     navigation,
     isLoading,
-    getSubBreedImage,
     error,
   } = props;
-
-  const onRefresh = useCallback(() => {
-    const selectedBreedFromParam: string = navigation.getParam(
-      'selectedSubBreed',
-    );
-    setRefreshing(true);
-    clearCachedSubBreed(selectedBreedFromParam);
-    setNewImagesForSubBreed(selectedBreedFromParam);
-  }, []);
 
   useEffect(() => {
     const selectedBreedFromParam: string = navigation.getParam(
       'selectedSubBreed',
     );
-    const storedImages = getStoredImagesForSubBreed(selectedBreedFromParam);
+    const storedImages: string[] = getStoredImagesForSubBreed(selectedBreedFromParam);
 
     if (!storedImages || (storedImages && !storedImages.length)) {
-      setNewImagesForSubBreed(selectedBreedFromParam);
+      getNewImagesForSubBreed(selectedBreedFromParam);
     }
   }, []);
 
-  const hasData = (arr: any[]) => {
-    return !arr.includes(undefined);
-  };
+  const handleOnRefresh = () => {
+    const selectedBreedFromParam: string = navigation.getParam(
+      'selectedSubBreed',
+    );
+    setRefreshing(true);
+    clearCachedSubBreed(selectedBreedFromParam);
+    getNewImagesForSubBreed(selectedBreedFromParam);
+  }
 
-  const setNewImagesForSubBreed = (selectedBreedFromParam: string): void => {
+  const onRefresh = useCallback(handleOnRefresh, []);
+
+  const getNewImagesForSubBreed = (selectedBreedFromParam: string): void => {
     const getFirstSubreedImage = getSubBreedImage(selectedBreedFromParam);
     const getSecondSubreedImage = getSubBreedImage(selectedBreedFromParam);
     const errorMsg = error || 'Something went wrong';
@@ -106,9 +105,9 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
   };
 
   const renderLoading = (): ReactElement => (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <Container>
       <ActivityIndicator color={Palette.brand} size={'large'} />
-    </View>
+    </Container>
   );
 
   const renderImages = (): ReactElement => (
@@ -137,24 +136,23 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
           />
         </ImageCard>
       ))}
-      {subBreedImages.length === 0 &&
-        renderNoItemsLabel()}
+      {subBreedImages.length === 0 && renderNoItemsLabel()}
     </ScrollView>
   );
 
   const renderNoItemsLabel = (): ReactElement => (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <BaseText size={'28px'} darkMode>
+    <Container>
+      <BaseText size={'28px'} darkMode center>
         No images to display
       </BaseText>
-    </View>
+    </Container>
   );
 
   return (
-    <Container>
+    <MainContainer>
       {isLoading && !refreshing && renderLoading()}
       {subBreedImages && renderImages()}
-    </Container>
+    </MainContainer>
   );
 };
 

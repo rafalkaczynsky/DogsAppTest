@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     backgroundColor: Palette.brand,
   },
   appHeaderTitle: {
-    fontSize: 25,
+    fontSize: 24,
     color: Palette.lightest,
     textTransform: 'capitalize',
     fontWeight: 'bold',

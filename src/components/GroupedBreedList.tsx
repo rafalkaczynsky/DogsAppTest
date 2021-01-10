@@ -1,7 +1,8 @@
 import React, {ReactNode, ReactElement, useEffect} from 'react';
 import {SectionList, View, Text} from 'react-native';
+import { Breed } from '../models';
 import Palette from '../styles/palette';
-import {BaseText} from './Core';
+import {BaseText, Container} from './Core';
 
 interface GroupedBreedList {
   styles?: any;
@@ -22,8 +23,8 @@ const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
   const filteredDogs = () =>
     groupedDogs.reduce(
       (
-        result: {breedName: any; data: any}[],
-        sectionData: {breedName: any; data: any},
+        result: Breed[],
+        sectionData: Breed,
       ) => {
         const {breedName, data} = sectionData;
 
@@ -47,14 +48,13 @@ const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
       },
       [],
     );
-
   if (!groupedDogs || groupedDogs.length === 0) {
     return (
-      <View style={{alignItems: 'center', justifyContent: 'center'}}>
-        <BaseText size={'18px'} color={Palette.darkest}>
+      <Container>
+        <BaseText size={'18px'} darkMode center>
           No results :(
         </BaseText>
-      </View>
+      </Container>
     );
   }
   return <SectionList {...props} sections={filteredDogs()} />;

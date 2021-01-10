@@ -19,6 +19,8 @@ import {
   ListHeader,
   Container,
   SearchBox,
+  MainContainer,
+  BaseContainer,
 } from '../components/Core';
 import {getAllDogs} from '../modules/dogs';
 import {Breed} from '../models';
@@ -44,7 +46,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     !dogs.length ? getAllDogs() : null;
   }, []);
 
-  const onRefresh = useCallback(() => {
+  const handleOnRefresh = () => {
     setRefreshing(true);
     getAllDogs()
       .then((res) => setRefreshing(false))
@@ -52,11 +54,12 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
         alert(error);
         setRefreshing(false);
       });
-  }, []);
-
+  }
   const handleSubBreedPressed = (item: string) => {
     navigation.navigate('SubBreedsScreen', {selectedSubBreed: item});
   };
+
+  const onRefresh = useCallback(handleOnRefresh, []);
 
   const renderSearchBox = () => (
     <SearchBox
@@ -75,7 +78,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     section: {breedName},
   }: {
     section: {breedName: String};
-  }): ReactElement => <SectionHeader size={'24px'}>{breedName}</SectionHeader>;
+  }): ReactElement => <SectionHeader size={'18px'}>{breedName}</SectionHeader>;
 
   const renderItemSeparator = (): ReactNode => (
     <View style={styles.itemSeparator} />
@@ -86,7 +89,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
   );
 
   const renderList = (): ReactElement => (
-    <View style={{flex: 1}}>
+    <BaseContainer>
       <GroupedBreedList
         styles={{backgroundColor: 'yellow'}}
         groupedDogs={props.dogs}
@@ -101,21 +104,21 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
-    </View>
+    </BaseContainer>
   );
 
   const renderLoading = (): ReactNode => (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <Container>
       <ActivityIndicator color={Palette.brand} size={'large'} />
-    </View>
+    </Container>
   );
 
   return (
-    <Container>
+    <MainContainer>
       {renderSearchBox()}
       {isLoading && !refreshing && renderLoading()}
       {renderList()}
-    </Container>
+    </MainContainer>
   );
 };
 

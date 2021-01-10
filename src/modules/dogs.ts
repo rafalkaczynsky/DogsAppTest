@@ -1,7 +1,8 @@
 import produce from 'immer';
-import { getAllDogsApi, getSubBreedImageApi } from '../api/repositories';
+import {getAllDogsApi, getSubBreedImageApi} from '../api/repositories';
 import {Breed} from '../models';
-import { RootState } from './rootState';
+import { convertDogsArray, removeImagesBySubBreed, transformSubreedName } from '../utils/utils';
+import {RootState} from './rootState';
 
 export enum DogsTypeKeys {
   GET_DOGS_ATTEMPT = 'dogs/GET_DOGS_ATTEMPT',
@@ -103,26 +104,17 @@ export default function (
         draft.error = action.payload;
         return draft;
       case DogsTypeKeys.CLEAR_CACHED_IMAGES:
-        draft.subBreeds = draft.subBreeds.filter((imageUrl) => {
-          const breedFull = action.payload.split(' ');
-          const mainBreed = breedFull[0];
-          return !imageUrl.includes(mainBreed);
-        });
+        draft.subBreeds = removeImagesBySubBreed(draft.subBreeds, action.payload);
         return draft;
     }
   });
 }
 
 // Actions
-export const getSubBreedImage = (subBreed: string) => (
-  dispatch: any
-) => {
-  
+export const getSubBreedImage = (subBreed: string) => (dispatch: any) => {
   dispatch({type: DogsTypeKeys.GET_SUBBREED_IMAGE_ATTEMPT});
 
-  const subBreedNew =
-    subBreed.trim().split(' ')[1] + '/' + subBreed.trim().split(' ')[0];
-
+  const subBreedNew = transformSubreedName(subBreed);
   const subBreedImg = getSubBreedImageApi(subBreedNew)
     .then((response) => response.json())
     .then((json) => {
@@ -151,24 +143,10 @@ export const getAllDogs = () => (dispatch: any) => {
     .then((json) => {
       if (json.status === 'success') {
         const dogs: any = json.message;
-        const dogsArray: string[] = Object.keys(dogs);
+        const convertedDogsArray = convertDogsArray(dogs);
 
-        const convertedDogs: Breed[] = dogsArray.reduce(
-          (result: Breed[], breedKey: string) => {
-            const breedItem: Breed = {
-              breedName: breedKey,
-              data: dogs[breedKey].map(
-                (subBreed: string) => subBreed + ' ' + breedKey,
-              ),
-            };
-            result.push(breedItem);
-            return result;
-          },
-          [],
-        );
-
-        dispatch({type: DogsTypeKeys.GET_DOGS_SUCCESS, payload: convertedDogs});
-        return convertedDogs;
+        dispatch({type: DogsTypeKeys.GET_DOGS_SUCCESS, payload: convertedDogsArray});
+        return convertedDogsArray;
       }
 
       return json.message;

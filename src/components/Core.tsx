@@ -5,16 +5,31 @@ import Styles from '../styles/base';
 import Palette from '../styles/palette';
 import {withProps} from '../helpers';
 
-export const Container = React.memo(styled(View)`
+export const BaseContainer = React.memo(styled(View)`
   flex: 1;
+`);
+
+BaseContainer.displayName = 'BaseContainer';
+
+export const MainContainer = React.memo(styled(BaseContainer)`
   background-color:${Palette.lightest};
   padding: 8px;
+`);
+
+MainContainer.displayName = 'MainContainer';
+
+export const Container = React.memo(styled(BaseContainer)`
+  background-color: transparent;
+  padding: 0px;
+  justify-content: center;
+  text-align: center;
 `);
 
 Container.displayName = 'Container';
 
 export const BaseText = React.memo(withProps()(styled(Text))`
   color: ${({darkMode}) => (darkMode ? Palette.darkest : Palette.lightest)};
+  text-align: ${({center}) => (center ? 'center' : 'auto')};
   flex-wrap: wrap;
   letter-spacing: 1.2px;
   padding: 16px;

@@ -1,4 +1,5 @@
 import produce from 'immer';
+import { getAllDogsApi, getSubBreedImageApi } from '../api/repositories';
 import {Breed} from '../models';
 import { RootState } from './rootState';
 
@@ -111,20 +112,6 @@ export default function (
     }
   });
 }
-// API endpoints
-const getAllDogsUrl = 'https://dog.ceo/api/breeds/list/all';
-const getSubBreedImageUrl = (subBreed: string): string =>
-  `https://dog.ceo/api/breed/${subBreed}/images/random`;
-
-// API
-export const getSubBreedImageApi = (subBreed: string): Promise<any> => {
-  console.log('URL ', getSubBreedImageUrl(subBreed));
-  return fetch(getSubBreedImageUrl(subBreed));
-};
-
-export const getAllDogsApi = (): Promise<any> => {
-  return fetch(getAllDogsUrl);
-};
 
 // Actions
 export const getSubBreedImage = (subBreed: string) => (

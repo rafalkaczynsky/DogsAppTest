@@ -1,9 +1,10 @@
 import React, {ReactElement} from 'react';
-import {Text, TextInput, View} from 'react-native';
+import {Text, TextInput, View, Platform } from 'react-native';
 import styled from 'styled-components';
 import Styles from '../styles/base';
 import Palette from '../styles/palette';
 import {withProps} from '../helpers';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const BaseContainer = React.memo(styled(View)`
   flex: 1;
@@ -12,8 +13,9 @@ export const BaseContainer = React.memo(styled(View)`
 BaseContainer.displayName = 'BaseContainer';
 
 export const MainContainer = React.memo(styled(BaseContainer)`
-  background-color:${Palette.lightest};
-  padding: 8px;
+  background-color: ${Palette.lightest};
+  padding: 10px;
+  padding-bottom: ${Platform.OS == 'ios' ? '25px' : '8px'};
 `);
 
 MainContainer.displayName = 'MainContainer';
@@ -33,7 +35,7 @@ export const BaseText = React.memo(withProps()(styled(Text))`
   flex-wrap: wrap;
   letter-spacing: 1.2px;
   padding: 16px;
-  font-size: ${({size}) => (size ? size : '18px')};
+  font-size: ${({size}) => (size ? size + 'px' : '18px')};
 `);
 
 BaseText.displayName = 'BaseText';
@@ -61,16 +63,14 @@ export const ListHeader = React.memo(styled(BaseText)`
 
 ListHeader.displayName = 'ListHeader';
 
-export const SearchBox = React.memo(withProps()(
-  styled(TextInput),
-)`
+export const SearchBox = React.memo(withProps()(styled(TextInput))`
   width: 100%;
   border-width: 2px;
   border-radius: 6px;
   padding: 10px;
   margin-bottom: 15px;
   margin-top: 15px;
-  font-size: ${({size}) => (size !== undefined ? size : '24px')};
+  font-size: ${({size}) => (size !== undefined ? size + 'px' : '24px')};
   border-color: ${Palette.darkest};
 `);
 
@@ -79,9 +79,18 @@ SearchBox.displayName = 'SearchBox';
 export const ImageCard = React.memo(styled(View)`
   flex: 1;
   padding: 10px;
-  borderRadius: 6px;
+  border-radius: 6px;
   margin: 10px;
   background-color: ${Palette.accent};
 `);
 
 ImageCard.displayName = 'ImageCard';
+
+export const Button = React.memo(
+  styled(TouchableOpacity)`
+    margin-bottom: 5px;
+    background-color: ${Palette.brand};
+  `,
+);
+
+Button.displayName = 'Button';

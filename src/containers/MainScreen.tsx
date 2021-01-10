@@ -5,11 +5,7 @@ import React, {
   ReactElement,
   useCallback,
 } from 'react';
-import {
-  View,
-  ActivityIndicator,
-  RefreshControl,
-} from 'react-native';
+import {View, ActivityIndicator, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 import {RootState} from '../modules/rootState';
 import {GroupedBreedList} from '../components';
@@ -29,6 +25,7 @@ import Palette from '../styles/palette';
 import styles from '../styles/base';
 
 interface MainScreenProps {
+  fontSize: number;
   dogs: Breed[];
   isLoading: boolean;
   error: string;
@@ -40,7 +37,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
-  const {getAllDogs, isLoading, dogs, navigation} = props;
+  const {getAllDogs, isLoading, dogs, navigation, fontSize} = props;
 
   useEffect(() => {
     !dogs.length ? getAllDogs() : null;
@@ -54,7 +51,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
         alert(error);
         setRefreshing(false);
       });
-  }
+  };
   const handleSubBreedPressed = (item: string) => {
     navigation.navigate('SubBreedsScreen', {selectedSubBreed: item});
   };
@@ -63,6 +60,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
 
   const renderSearchBox = () => (
     <SearchBox
+      size={fontSize}
       placeholder={'Search for dogs ...'}
       onChangeText={(txt) => setSearchTerm(txt)}
     />
@@ -70,7 +68,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
 
   const renderSubBreadItem = ({item}: {item: String}): ReactNode => (
     <TouchableOpacity onPress={() => handleSubBreedPressed(item)}>
-      <SectionItem size={'18px'}>{item}</SectionItem>
+      <SectionItem size={fontSize}>{item}</SectionItem>
     </TouchableOpacity>
   );
 
@@ -78,21 +76,21 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     section: {breedName},
   }: {
     section: {breedName: String};
-  }): ReactElement => <SectionHeader size={'18px'}>{breedName}</SectionHeader>;
+  }): ReactElement => <SectionHeader size={fontSize}>{breedName}</SectionHeader>;
 
   const renderItemSeparator = (): ReactNode => (
     <View style={styles.itemSeparator} />
   );
 
   const renderListHeader = (): ReactNode => (
-    <ListHeader size={'18px'}>Results: </ListHeader>
+    <ListHeader size={fontSize}>Results: </ListHeader>
   );
 
   const renderList = (): ReactElement => (
     <BaseContainer>
       <GroupedBreedList
         styles={{backgroundColor: 'yellow'}}
-        groupedDogs={props.dogs}
+        groupedDogs={dogs}
         searchTerm={searchTerm}
         renderSectionHeader={renderBreedHeader}
         renderItem={renderSubBreadItem}
@@ -126,6 +124,7 @@ const mapStateToProps = (state: RootState) => ({
   dogs: state.dogs.dogs,
   isLoading: state.dogs.isLoadingDogs,
   error: state.dogs.error,
+  fontSize: state.settings.fontSize
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

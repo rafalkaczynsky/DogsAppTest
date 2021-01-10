@@ -142,7 +142,7 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
 
   const renderNoItemsLabel = (): ReactElement => (
     <Container>
-      <BaseText size={'28px'} darkMode center>
+      <BaseText size={28} darkMode center>
         No images to display
       </BaseText>
     </Container>

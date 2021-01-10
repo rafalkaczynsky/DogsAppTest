@@ -51,7 +51,7 @@ const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
   if (!groupedDogs || groupedDogs.length === 0) {
     return (
       <Container>
-        <BaseText size={'18px'} darkMode center>
+        <BaseText size={18} darkMode center>
           No results :(
         </BaseText>
       </Container>

@@ -9,10 +9,11 @@ interface GroupedBreedList {
   searchTerm: String;
   renderSectionHeader: ReactNode;
   renderItem: ReactNode;
-  keyExtractor: (item: any)=> void;
+  keyExtractor: (item: any) => void;
   initialNumToRender: number;
   ItemSeparatorComponent: ReactNode;
   ListHeaderComponent: ReactNode;
+  refreshControl: ReactElement;
 }
 
 const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
@@ -49,9 +50,9 @@ const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
 
   if (!groupedDogs || groupedDogs.length === 0) {
     return (
-      <View>
+      <View style={{alignItems: 'center', justifyContent: 'center'}}>
         <BaseText size={'18px'} color={Palette.darkest}>
-          Waiting for results ...
+          No results :(
         </BaseText>
       </View>
     );

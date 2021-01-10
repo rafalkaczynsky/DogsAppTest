@@ -14,11 +14,11 @@ export const Container = React.memo(styled(View)`
 Container.displayName = 'Container';
 
 export const BaseText = React.memo(withProps()(styled(Text))`
-  color: ${Palette.lightest};
+  color: ${({darkMode}) => (darkMode ? Palette.darkest : Palette.lightest)};
   flex-wrap: wrap;
   letter-spacing: 1.2px;
   padding: 16px;
-  font-size: ${({size}) => (size !== undefined ? size : '18px')};
+  font-size: ${({size}) => (size ? size : '18px')};
 `);
 
 BaseText.displayName = 'BaseText';

@@ -150,7 +150,7 @@ export const getSubBreedImage = (subBreed: string) => (
     .catch((error) => {
       dispatch({
         type: DogsTypeKeys.GET_SUBBREED_IMAGE_FAILED,
-        error: error.message,
+        payload: error.message,
       });
     });
   return subBreedImg;
@@ -187,7 +187,7 @@ export const getAllDogs = () => (dispatch: any) => {
       return json.message;
     })
     .catch((error) => {
-      dispatch({type: DogsTypeKeys.GET_DOGS_FAILED, error: error.message});
+      dispatch({type: DogsTypeKeys.GET_DOGS_FAILED, payload: error.message});
     });
   return dogs;
 };

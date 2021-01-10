@@ -1,12 +1,12 @@
 import React, {ReactElement, useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, RefreshControl, View} from 'react-native';
+import {ActivityIndicator, Alert, RefreshControl, View} from 'react-native';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import ProgressBar from 'react-native-progress/Bar';
 import {createImageProgress} from 'react-native-image-progress';
 import {clearCachedSubBreed, getSubBreedImage} from '../modules/dogs';
 import {RootState} from '../modules/rootState';
-import {Container, ImageCard} from '../components/Core';
+import {BaseText, Container, ImageCard} from '../components/Core';
 import Palette from '../styles/palette';
 import {ScrollView} from 'react-native-gesture-handler';
 
@@ -18,16 +18,23 @@ interface SubBreedsScreenProps {
   navigation: any;
   images: string[];
   isLoading: boolean;
+  error: string;
   //..
 }
 
 const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
   const [subBreedImages, setSubBreedImages] = useState<string[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const {
+    clearCachedSubBreed,
+    navigation,
+    isLoading,
+    getSubBreedImage,
+    error,
+  } = props;
 
   const onRefresh = useCallback(() => {
-    const {clearCachedSubBreed} = props;
-    const selectedBreedFromParam: string = props.navigation.getParam(
+    const selectedBreedFromParam: string = navigation.getParam(
       'selectedSubBreed',
     );
     setRefreshing(true);
@@ -36,7 +43,7 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
   }, []);
 
   useEffect(() => {
-    const selectedBreedFromParam: string = props.navigation.getParam(
+    const selectedBreedFromParam: string = navigation.getParam(
       'selectedSubBreed',
     );
     const storedImages = getStoredImagesForSubBreed(selectedBreedFromParam);
@@ -46,25 +53,36 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
     }
   }, []);
 
+  const hasData = (arr: any[]) => {
+    return !arr.includes(undefined);
+  };
+
   const setNewImagesForSubBreed = (selectedBreedFromParam: string): void => {
-    const {getSubBreedImage} = props;
     const getFirstSubreedImage = getSubBreedImage(selectedBreedFromParam);
     const getSecondSubreedImage = getSubBreedImage(selectedBreedFromParam);
+    const errorMsg = error || 'Something went wrong';
 
     let newImages: string[] = [];
-    Promise.all([getFirstSubreedImage, getSecondSubreedImage]).then(
-      (values) => {
-        values.forEach((val) => {
-          if (val.status === 'success') {
-            let newImage = val.message;
-            newImages = [...newImages, newImage];
-          }
-        });
+    Promise.all([getFirstSubreedImage, getSecondSubreedImage])
+      .then((values) => {
+        if (hasData(values)) {
+          values.forEach((val) => {
+            if (val && val.status === 'success') {
+              let newImage = val.message;
+              newImages = [...newImages, newImage];
+            }
+          });
 
-        setSubBreedImages(newImages);
+          setSubBreedImages(newImages);
+        } else {
+          alert(errorMsg);
+        }
         setRefreshing(false);
-      },
-    );
+      })
+      .catch((err) => {
+        alert(errorMsg);
+        setRefreshing(false);
+      });
   };
 
   const getStoredImagesForSubBreed = (
@@ -119,13 +137,23 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
           />
         </ImageCard>
       ))}
+      {subBreedImages.length === 0 &&
+        renderNoItemsLabel()}
     </ScrollView>
+  );
+
+  const renderNoItemsLabel = (): ReactElement => (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <BaseText size={'28px'} darkMode>
+        No images to display
+      </BaseText>
+    </View>
   );
 
   return (
     <Container>
-      {props.isLoading && !refreshing && renderLoading()}
-      {subBreedImages.length > 0 && renderImages()}
+      {isLoading && !refreshing && renderLoading()}
+      {subBreedImages && renderImages()}
     </Container>
   );
 };
@@ -133,6 +161,7 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
 const mapStateToProps = (state: RootState) => ({
   images: state.dogs.subBreeds,
   isLoading: state.dogs.isLoadingImage,
+  error: state.dogs.error,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

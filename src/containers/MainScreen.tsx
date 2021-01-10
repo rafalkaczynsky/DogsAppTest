@@ -1,5 +1,15 @@
-import React, {useState, useEffect, ReactNode, ReactElement} from 'react';
-import {View, TextInput, ActivityIndicator} from 'react-native';
+import React, {
+  useState,
+  useEffect,
+  ReactNode,
+  ReactElement,
+  useCallback,
+} from 'react';
+import {
+  View,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {RootState} from '../modules/rootState';
 import {GroupedBreedList} from '../components';
@@ -21,18 +31,31 @@ interface MainScreenProps {
   isLoading: boolean;
   error: string;
   navigation: any; // Todo: Check for proper type
-  getAllDogs: ()=> void;
+  getAllDogs: () => Promise<string[]>;
 }
 
 const MainScreen = (props: MainScreenProps): ReactElement => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const {getAllDogs, isLoading, dogs, navigation} = props;
 
   useEffect(() => {
-    props.getAllDogs();
+    !dogs.length ? getAllDogs() : null;
+  }, []);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    getAllDogs()
+      .then((res) => setRefreshing(false))
+      .catch((error) => {
+        alert(error);
+        setRefreshing(false);
+      });
   }, []);
 
   const handleSubBreedPressed = (item: string) => {
-    props.navigation.navigate('SubBreedsScreen', {selectedSubBreed: item});
+    navigation.navigate('SubBreedsScreen', {selectedSubBreed: item});
   };
 
   const renderSearchBox = () => (
@@ -74,6 +97,9 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
         initialNumToRender={10}
         ItemSeparatorComponent={renderItemSeparator}
         ListHeaderComponent={renderListHeader}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );
@@ -87,7 +113,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
   return (
     <Container>
       {renderSearchBox()}
-      {props.isLoading && renderLoading()}
+      {isLoading && !refreshing && renderLoading()}
       {renderList()}
     </Container>
   );

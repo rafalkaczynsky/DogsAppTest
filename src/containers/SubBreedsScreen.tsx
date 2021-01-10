@@ -1,5 +1,5 @@
 import React, {ReactElement, useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, Alert, RefreshControl, View} from 'react-native';
+import {RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import ProgressBar from 'react-native-progress/Bar';

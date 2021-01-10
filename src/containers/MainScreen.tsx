@@ -5,7 +5,7 @@ import React, {
   ReactElement,
   useCallback,
 } from 'react';
-import {View, ActivityIndicator, RefreshControl} from 'react-native';
+import {View, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 import {RootState} from '../modules/rootState';
 import {GroupedBreedList, LoadingIndicator} from '../components';

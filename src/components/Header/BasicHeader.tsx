@@ -1,5 +1,5 @@
 import React from 'react';
-import {Platform, StatusBar} from 'react-native';
+import {StatusBar} from 'react-native';
 import {ReactElement, ReactNode} from 'react';
 import Palette from '../../styles/palette';
 import {BaseText, HeaderContainer, HeaderContent} from '../Core';
@@ -13,7 +13,7 @@ const BasicHeader = (props: BasicHeaderProps): ReactElement => {
 
   return (
     <HeaderContainer>
-      {Platform.OS === 'ios' && <StatusBar backgroundColor={Palette.brand} />}
+      {<StatusBar backgroundColor={Palette.brand} />}
       <HeaderContent>
         {children ? children : <BaseText>{title}</BaseText>}
       </HeaderContent>

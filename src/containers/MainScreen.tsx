@@ -74,7 +74,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     <SearchBox
       size={fontSize}
       placeholder={'Search for dogs ...'}
-      underlineColorAndroid="transparent"
+      underlineColorAndroid={"transparent"}
       onChangeText={(txt: string) => setSearchTerm(txt)}
     />
   );

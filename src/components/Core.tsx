@@ -125,7 +125,8 @@ Button.displayName = 'Button';
 
 export const HeaderContainer: MemoizedStyledElement = React.memo(
   styled(View)`
-    padding-top: ${Platform.OS === 'ios' ? '0px' : StatusBar.currentHeight + 'px'};
+    background-color: ${Palette.brand};
+    padding-top: ${Platform.OS == 'ios' ? '10px' :'0px'};
     min-height: ${Header.HEIGHT + 'px'};
   `,
 );

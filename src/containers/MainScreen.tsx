@@ -5,7 +5,7 @@ import React, {
   ReactElement,
   useCallback,
 } from 'react';
-import {View, RefreshControl} from 'react-native';
+import {View, RefreshControl,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {RootState} from '../modules/rootState';
 import {GroupedBreedList, LoadingIndicator} from '../components';
@@ -19,7 +19,6 @@ import {
 } from '../components/Core';
 import {getAllDogs} from '../modules/dogs';
 import {Breed} from '../models';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import styles from '../styles/base';
 
 interface MainScreenProps {

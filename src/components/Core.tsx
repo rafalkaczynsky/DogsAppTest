@@ -1,9 +1,8 @@
-import React, {ReactElement} from 'react';
-import {Text, TextInput, View, Platform } from 'react-native';
+import React, {NamedExoticComponent } from 'react';
+import {Text, TextInput, View, Platform, TouchableOpacity} from 'react-native';
 import styled from 'styled-components';
 import Palette from '../styles/palette';
 import {withProps} from '../helpers';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const BaseContainer = React.memo(styled(View)`
   flex: 1;

@@ -6,12 +6,9 @@ import {
   NavigationParams,
 } from 'react-navigation';
 import SettingsButton from './components/SettingsButton';
-import {BaseText} from './components/Core';
 import MainScreen from './containers/MainScreen';
 import SettingsScreen from './containers/SettingsScreen';
 import SubBreedsScreen from './containers/SubBreedsScreen';
-import styles from './styles/base';
-import Palette from './styles/palette';
 import {ReactElement} from 'react';
 import {findRouteNameFromNavigator} from './utils/utils';
 import {AppHeader} from './components/Header';
@@ -20,32 +17,16 @@ const RootStackNavigation = createStackNavigator(
   {
     MainSearchScreen: {
       screen: MainScreen,
-      // navigationOptions: (navigation: any) => ({
-      //   title: 'Main Screen',
-      //   headerRight: (
-      //     <SettingsButton navigation={navigation}/>
-      //   )
-      // }),
     },
     SubBreedsScreen: {
       screen: SubBreedsScreen,
-      // navigationOptions: (navigation: any) => {
-      //   const headerTitle = navigation.navigation.getParam('selectedSubBreed');
-      //   return {
-      //     title: headerTitle,
-      //   };
-      // },
     },
     SettingsScreen: {
       screen: SettingsScreen,
-      // navigationOptions: () => ({
-      //   title: 'Settings',
-      // }),
     },
   },
   {
     defaultNavigationOptions: ({screenProps, navigation}) => {
-      console.log(navigation);
       const activeRouteName: string = findRouteNameFromNavigator(navigation)
         .routeName;
       let header: ReactElement | null = null;
@@ -54,7 +35,7 @@ const RootStackNavigation = createStackNavigator(
         case 'MainSearchScreen':
           header = (
             <AppHeader
-              title={'Mc DoggyApp'}
+              title={'Doggy McDogFace'}
               rightElement={<SettingsButton navigation={navigation} />}
             />
           );

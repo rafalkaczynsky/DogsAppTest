@@ -1,3 +1,4 @@
+import { PixelRatio } from 'react-native';
 import { NavigationScreenProp } from 'react-navigation';
 import {Breed} from '../models';
 
@@ -60,3 +61,9 @@ export const findRouteNameFromNavigator = (
   }
   return route;
 };
+
+
+export const normalize = (size: number, scale?: number): number => {
+  const newSize: number = scale ? size * scale : size;
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+} 

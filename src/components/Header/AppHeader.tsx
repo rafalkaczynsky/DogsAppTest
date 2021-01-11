@@ -7,6 +7,7 @@ import {RootState} from '../../modules/rootState';
 import {BaseText, Button, Container} from '../Core';
 import BasicHeader from './BasicHeader';
 import Palette from '../../styles/palette';
+import { normalize } from '../../utils/utils';
 
 type HeaderElement = ReactElement | ReactNode | null;
 
@@ -34,7 +35,7 @@ const AppHeader = (props: AppHeaderProps): ReactElement => {
   const renderRight = (): HeaderElement =>
     rightElement ? <Container alignType={"flex-end"}>{rightElement}</Container> : <Container />;
   const renderTitle = (): HeaderElement => (
-    <BaseText size={fontSize}>{title}</BaseText>
+    <BaseText size={normalize(fontSize, 1.33)}>{title}</BaseText>
   );
 
   const renderBackButton = () => (

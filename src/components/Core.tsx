@@ -4,13 +4,15 @@ import styled from 'styled-components';
 import Palette from '../styles/palette';
 import {withProps} from '../helpers';
 
-export const BaseContainer = React.memo(styled(View)`
+type MemoizedStyledElement = NamedExoticComponent<any> & { readonly type: any; };
+
+export const BaseContainer: MemoizedStyledElement = React.memo(styled(View)`
   flex: 1;
 `);
 
 BaseContainer.displayName = 'BaseContainer';
 
-export const MainContainer = React.memo(styled(BaseContainer)`
+export const MainContainer: MemoizedStyledElement = React.memo(styled(BaseContainer)`
   background-color: ${Palette.lightest};
   padding: 10px;
   padding-bottom: ${Platform.OS == 'ios' ? '25px' : '8px'};
@@ -18,7 +20,7 @@ export const MainContainer = React.memo(styled(BaseContainer)`
 
 MainContainer.displayName = 'MainContainer';
 
-export const Container = React.memo(styled(BaseContainer)`
+export const Container: MemoizedStyledElement = React.memo(styled(BaseContainer)`
   background-color: transparent;
   padding: 0px;
   justify-content: center;
@@ -27,7 +29,7 @@ export const Container = React.memo(styled(BaseContainer)`
 
 Container.displayName = 'Container';
 
-export const BaseText = React.memo(withProps()(styled(Text))`
+export const BaseText: MemoizedStyledElement = React.memo(withProps()(styled(Text))`
   color: ${({darkMode}) => (darkMode ? Palette.darkest : Palette.lightest)};
   text-align: ${({center}) => (center ? 'center' : 'auto')};
   flex-wrap: wrap;
@@ -38,7 +40,7 @@ export const BaseText = React.memo(withProps()(styled(Text))`
 
 BaseText.displayName = 'BaseText';
 
-export const SectionHeader = React.memo(styled(BaseText)`
+export const SectionHeader: MemoizedStyledElement = React.memo(styled(BaseText)`
   font-weight: bold;
   padding: 16px;
   text-transform: capitalize;
@@ -47,7 +49,7 @@ export const SectionHeader = React.memo(styled(BaseText)`
 
 SectionHeader.displayName = 'SectionHeader';
 
-export const SectionItem = React.memo(styled(BaseText)`
+export const SectionItem: MemoizedStyledElement = React.memo(styled(BaseText)`
   padding: 16px;
   text-transform: capitalize;
   background-color: ${Palette.darkest};
@@ -56,7 +58,7 @@ export const SectionItem = React.memo(styled(BaseText)`
 
 SectionItem.displayName = 'SectionItem';
 
-export const ListHeader = React.memo(styled(BaseText)`
+export const ListHeader: MemoizedStyledElement = React.memo(styled(BaseText)`
   padding-left: 0px;
   padding-bottom: 10px;
   color: ${Palette.darkest};
@@ -64,20 +66,20 @@ export const ListHeader = React.memo(styled(BaseText)`
 
 ListHeader.displayName = 'ListHeader';
 
-export const SearchBox = React.memo(withProps()(styled(TextInput))`
+export const SearchBox: MemoizedStyledElement = React.memo(withProps()(styled(TextInput))`
   width: 100%;
   border-width: 2px;
   border-radius: 6px;
   padding: 10px;
   margin-bottom: 15px;
   margin-top: 15px;
-  font-size: ${({size}) => (size !== undefined ? size + 'px' : '24px')};
+  font-size: ${({size}: ({size: string}) ) => (size !== undefined ? size + 'px' : '24px')};
   border-color: ${Palette.darkest};
 `);
 
 SearchBox.displayName = 'SearchBox';
 
-export const ImageCard = React.memo(styled(View)`
+export const ImageCard: MemoizedStyledElement = React.memo(styled(View)`
   flex: 1;
   padding: 10px;
   border-radius: 6px;
@@ -87,7 +89,7 @@ export const ImageCard = React.memo(styled(View)`
 
 ImageCard.displayName = 'ImageCard';
 
-export const Button = React.memo(
+export const Button: MemoizedStyledElement = React.memo(
   styled(TouchableOpacity)`
     margin-bottom: 5px;
     justify-content: center;

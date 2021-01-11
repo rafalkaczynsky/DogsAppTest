@@ -1,6 +1,6 @@
 # DogsAppTest
 
-Some me thoughts and comments:
+Some my thoughts and comments:
 
 1. As there was mantioned that there is some freedom around the implementioned I've added some basic 
 UI improvements to the Screen Shots provided (mainly paddings to make it looks a little bit better). Can still remove them if you want to :) 

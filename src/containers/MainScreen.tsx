@@ -122,7 +122,6 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
 
   const renderLoading = (): ReactElement => <LoadingIndicator/>
 
-  console.log(StatusBar)
   return (
     <MainContainer>
       {renderSearchBox()}

@@ -58,6 +58,7 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
     }
   }, []);
 
+  const keyExtractor = (item: string, index: number): string => 'ImageCardKey' + item + index;
   /**
    * This method is handling processes when onRefresh is pulled down
    * Is removing saved images of selected sub breed and fetching
@@ -152,8 +153,8 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
-      {subBreedImages.map((imageUrl: any) => (
-        <ImageCard key={'ImageCard' + imageUrl}>
+      {subBreedImages.map((imageUrl: any, index) => (
+        <ImageCard key={keyExtractor(imageUrl, index)}>
           <Image
             style={styles.fastImage}
             source={{

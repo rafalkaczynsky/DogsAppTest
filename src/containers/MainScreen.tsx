@@ -64,7 +64,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
   };
 
   const onRefresh = useCallback(handleOnRefresh, []);
-
+  const keyExtractor = (item: any) => item;
   /**
    * Render Methods of MainScreen component
    */
@@ -107,7 +107,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
         searchTerm={searchTerm}
         renderSectionHeader={renderBreedHeader}
         renderItem={renderSubBreadItem}
-        keyExtractor={(item: any) => item}
+        keyExtractor={keyExtractor}
         initialNumToRender={10}
         ItemSeparatorComponent={renderItemSeparator}
         ListHeaderComponent={renderListHeader}

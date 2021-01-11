@@ -35,14 +35,16 @@ const RootStackNavigation = createStackNavigator(
         case 'MainSearchScreen':
           header = (
             <AppHeader
+              navigation={navigation}
               title={'Doggy McDogFace'}
               rightElement={<SettingsButton navigation={navigation} />}
             />
           );
           break;
         case 'SubBreedsScreen':
-          const title: string | undefined =
-            navigation.state.params.selectedSubBreed;
+          const params = navigation.state.params;
+          const title: string | undefined = params ? params.selectedSubBreed : 'Unknown';
+          
           header = (
             <AppHeader navigation={navigation} backButton title={title} />
           );

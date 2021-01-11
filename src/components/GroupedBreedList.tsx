@@ -1,4 +1,5 @@
 import React, {ReactNode, ReactElement, useEffect} from 'react';
+import { useState } from 'react';
 import {SectionList, View, Text} from 'react-native';
 import {Breed} from '../models';
 import {BaseText, Container} from './Core';
@@ -19,16 +20,18 @@ interface GroupedBreedList {
 const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
   const {groupedDogs, searchTerm} = props;
 
-  const filteredDogs = (): Breed[] =>
+  const [filteredDogs, setFilteredDogs] = useState([]);
+
+  useEffect(()=> {
+    const dogs = doFilteredDogs();
+    setFilteredDogs(dogs);
+  },[searchTerm]);
+
+  const doFilteredDogs = (): Breed[] => 
     groupedDogs.reduce((result: Breed[], sectionData: Breed) => {
       const {breedName, data} = sectionData;
 
-      const filteredData = data.filter((item: string) => {
-        let searchDataItem = breedName;
-        searchDataItem = item;
-
-        return searchDataItem.toLowerCase().includes(searchTerm.toLowerCase());
-      });
+      const filteredData = data.filter((item: string) => item.toLowerCase().includes(searchTerm.toLowerCase()));
 
       if (filteredData.length !== 0) {
         result.push({
@@ -39,7 +42,8 @@ const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
 
       return result;
     }, []);
-  if (!groupedDogs || groupedDogs.length === 0) {
+
+  if (filteredDogs.length === 0) {
     return (
       <Container>
         <BaseText size={18} darkMode center>
@@ -48,7 +52,7 @@ const GroupedBreedList = (props: GroupedBreedList): ReactElement => {
       </Container>
     );
   }
-  return <SectionList {...props} sections={filteredDogs()} />;
+  return <SectionList {...props} sections={filteredDogs} />;
 };
 
 export default GroupedBreedList;

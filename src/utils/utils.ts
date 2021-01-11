@@ -1,5 +1,5 @@
-import { PixelRatio } from 'react-native';
-import { NavigationScreenProp } from 'react-navigation';
+import {PixelRatio} from 'react-native';
+import {NavigationScreenProp} from 'react-navigation';
 import {Breed} from '../models';
 
 /**
@@ -29,7 +29,7 @@ export const transformSubreedName = (subBreed: string): string =>
  * @param {dogs} string[] selected sub breed name
  * This method is method converts dogs array fetched from API
  * to Array needed in APP
- */  
+ */
 export const convertDogsArray = (dogs: string[]): Breed[] => {
   const dogsArray: string[] = Object.keys(dogs);
 
@@ -53,7 +53,7 @@ export const convertDogsArray = (dogs: string[]): Breed[] => {
 export const hasData = (arr: any[]) => !arr.includes(undefined);
 
 export const findRouteNameFromNavigator = (
-  navigation: NavigationScreenProp<any>
+  navigation: NavigationScreenProp<any>,
 ) => {
   let route = navigation.state;
   while (route.routes) {
@@ -62,8 +62,10 @@ export const findRouteNameFromNavigator = (
   return route;
 };
 
-
 export const normalize = (size: number, scale?: number): number => {
   const newSize: number = scale ? size * scale : size;
-    return Math.round(PixelRatio.roundToNearestPixel(newSize));
-} 
+  return Math.round(PixelRatio.roundToNearestPixel(newSize));
+};
+
+export const setToMaxOfNChars = (str: string, n: number): string =>
+  n >= str.length ? str : str.substring(0, n) + '...';

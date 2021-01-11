@@ -4,10 +4,10 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import {ReactElement, ReactNode} from 'react';
 import {connect} from 'react-redux';
 import {RootState} from '../../modules/rootState';
-import {BaseText, Button, Container} from '../Core';
+import {BaseText, Button, Container, HeaderTitle} from '../Core';
 import BasicHeader from './BasicHeader';
 import Palette from '../../styles/palette';
-import { normalize } from '../../utils/utils';
+import { normalize, setToMaxOfNChars } from '../../utils/utils';
 
 type HeaderElement = ReactElement | ReactNode | null;
 
@@ -15,7 +15,7 @@ export interface AppHeaderProps {
   navigation: NavigationScreenProp<any>;
   backButton?: boolean | null;
   fontSize: number;
-  title: string | undefined;
+  title: string;
   children?: HeaderElement;
   leftElement?: HeaderElement;
   rightElement?: HeaderElement;
@@ -35,7 +35,7 @@ const AppHeader = (props: AppHeaderProps): ReactElement => {
   const renderRight = (): HeaderElement =>
     rightElement ? <Container alignType={"flex-end"}>{rightElement}</Container> : <Container />;
   const renderTitle = (): HeaderElement => (
-    <BaseText size={normalize(fontSize, 1.33)}>{title}</BaseText>
+    <HeaderTitle size={normalize(fontSize, 1.33)}>{setToMaxOfNChars(title, 15)}</HeaderTitle>
   );
 
   const renderBackButton = () => (

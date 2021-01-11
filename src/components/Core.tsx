@@ -61,7 +61,11 @@ export const SectionHeader: MemoizedStyledElement = React.memo(styled(BaseText)`
   background-color: ${Palette.accent};
 `);
 
-SectionHeader.displayName = 'SectionHeader';
+export const HeaderTitle: MemoizedStyledElement = React.memo(styled(BaseText)`
+  text-transform: capitalize;
+`);
+
+HeaderTitle.displayName = 'HeaderTitle';
 
 export const SectionItem: MemoizedStyledElement = React.memo(styled(BaseText)`
   padding: 16px;
@@ -90,7 +94,7 @@ export const SearchBox: MemoizedStyledElement = React.memo(withProps()(
   margin-bottom: 15px;
   margin-top: 15px;
   font-size: ${({size}: {size: string}) =>
-    size !== undefined ? size + 'px' : '24px'};
+    size ? size + 'px' : '24px'};
   border-color: ${Palette.darkest};
 `);
 
@@ -110,10 +114,10 @@ export const Button: MemoizedStyledElement = React.memo(
   styled(TouchableOpacity)`
     margin-bottom: 5px;
     justify-content: center;
-    align-items: center;
     background-color: ${Palette.brand};
     padding: 7px;
     margin: 5px;
+    align-items: flex-start;
   `,
 );
 
@@ -121,7 +125,7 @@ Button.displayName = 'Button';
 
 export const HeaderContainer: MemoizedStyledElement = React.memo(
   styled(View)`
-    padding-top: ${Platform.OS === 'ios' ? StatusBar.currentHeight : '0px'};
+    padding-top: ${Platform.OS === 'ios' ? '0px' : StatusBar.currentHeight + 'px'};
     min-height: ${Header.HEIGHT + 'px'};
   `,
 );
@@ -135,7 +139,6 @@ export const HeaderContent: MemoizedStyledElement = React.memo(
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding-horizontal: 10px;
   `,
 );
 

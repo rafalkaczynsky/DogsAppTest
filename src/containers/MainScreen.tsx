@@ -5,7 +5,7 @@ import React, {
   ReactElement,
   useCallback,
 } from 'react';
-import {View, RefreshControl,TouchableOpacity} from 'react-native';
+import {View, RefreshControl,TouchableOpacity, StatusBar} from 'react-native';
 import {connect} from 'react-redux';
 import {RootState} from '../modules/rootState';
 import {GroupedBreedList, LoadingIndicator} from '../components';
@@ -75,7 +75,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
       size={fontSize}
       placeholder={'Search for dogs ...'}
       underlineColorAndroid="transparent"
-      onChangeText={(txt) => setSearchTerm(txt)}
+      onChangeText={(txt: string) => setSearchTerm(txt)}
     />
   );
 
@@ -110,7 +110,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
         renderSectionHeader={renderBreedHeader}
         renderItem={renderSubBreadItem}
         keyExtractor={keyExtractor}
-        initialNumToRender={10}
+        initialNumToRender={20}
         ItemSeparatorComponent={renderItemSeparator}
         ListHeaderComponent={renderListHeader}
         refreshControl={
@@ -122,6 +122,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
 
   const renderLoading = (): ReactElement => <LoadingIndicator/>
 
+  console.log(StatusBar)
   return (
     <MainContainer>
       {renderSearchBox()}

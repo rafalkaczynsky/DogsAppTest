@@ -18,7 +18,7 @@ const logger = createLogger({
 let allMiddleware = [thunk];
 
 if (__DEV__) {
-  allMiddleware.push(logger);
+  // allMiddleware.push(logger);
 }
 
 const middleware = applyMiddleware(...allMiddleware);

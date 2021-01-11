@@ -33,11 +33,11 @@ export default function (
     switch (action.type) {
       case SettingsTypeKeys.INCREASE_FONT_SIZE:
         draft.fontSize =
-          draft.fontSize < 30 ? draft.fontSize + 2 : draft.fontSize;
+          draft.fontSize < 22 ? draft.fontSize + 2 : draft.fontSize;
         return draft;
       case SettingsTypeKeys.DECREASE_FONT_SIZE:
         draft.fontSize =
-          draft.fontSize > 10 ? draft.fontSize - 2 : draft.fontSize;
+          draft.fontSize > 12 ? draft.fontSize - 2 : draft.fontSize;
         return draft;
     }
   });

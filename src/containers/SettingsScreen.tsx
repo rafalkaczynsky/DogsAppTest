@@ -1,5 +1,5 @@
 import React, {
-    ReactElement, useCallback,
+    ReactElement
   } from 'react';
   import {connect} from 'react-redux';
   import {RootState} from '../modules/rootState';
@@ -38,8 +38,8 @@ import { decreaseFontSize, increaseFontSize } from '../modules/settings';
 
     return (
       <MainContainer>
-        {renderButton('Increase (max: 30)', increaseFontSize)}
-        {renderButton('Decrease (min: 10)', decreaseFontSize)}
+        {renderButton('Increase (max: 22)', increaseFontSize)}
+        {renderButton('Decrease (min: 12)', decreaseFontSize)}
         {renderFontSizeLabel()}
       </MainContainer>
     );

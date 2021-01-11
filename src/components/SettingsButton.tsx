@@ -8,7 +8,7 @@ export interface ButtonProps {
 const SettingsButton = (props: ButtonProps): ReactElement => {
   const {navigation} = props;
   return (
-    <Button onPress={() => navigation.navigation.navigate('SettingsScreen')}>
+    <Button onPress={() => navigation.navigate('SettingsScreen')}>
       <BaseText>Settings</BaseText>
     </Button>
   );

@@ -1,10 +1,18 @@
-import React, {NamedExoticComponent } from 'react';
-import {Text, TextInput, View, Platform, TouchableOpacity} from 'react-native';
+import React, {NamedExoticComponent} from 'react';
+import {
+  Text,
+  TextInput,
+  View,
+  Platform,
+  TouchableOpacity,
+  StatusBar,
+} from 'react-native';
 import styled from 'styled-components';
 import Palette from '../styles/palette';
 import {withProps} from '../helpers';
+import {Header} from 'react-navigation';
 
-type MemoizedStyledElement = NamedExoticComponent<any> & { readonly type: any; };
+type MemoizedStyledElement = NamedExoticComponent<any> & {readonly type: any};
 
 export const BaseContainer: MemoizedStyledElement = React.memo(styled(View)`
   flex: 1;
@@ -12,7 +20,9 @@ export const BaseContainer: MemoizedStyledElement = React.memo(styled(View)`
 
 BaseContainer.displayName = 'BaseContainer';
 
-export const MainContainer: MemoizedStyledElement = React.memo(styled(BaseContainer)`
+export const MainContainer: MemoizedStyledElement = React.memo(styled(
+  BaseContainer,
+)`
   background-color: ${Palette.lightest};
   padding: 10px;
   padding-bottom: ${Platform.OS == 'ios' ? '25px' : '8px'};
@@ -20,16 +30,20 @@ export const MainContainer: MemoizedStyledElement = React.memo(styled(BaseContai
 
 MainContainer.displayName = 'MainContainer';
 
-export const Container: MemoizedStyledElement = React.memo(styled(BaseContainer)`
+export const Container: MemoizedStyledElement = React.memo(withProps()(
+  styled(BaseContainer),
+)`
   background-color: transparent;
   padding: 0px;
   justify-content: center;
-  text-align: center;
+  align-items: ${({alignType}) => (alignType ? alignType : 'center')};
 `);
 
 Container.displayName = 'Container';
 
-export const BaseText: MemoizedStyledElement = React.memo(withProps()(styled(Text))`
+export const BaseText: MemoizedStyledElement = React.memo(withProps()(
+  styled(Text),
+)`
   color: ${({darkMode}) => (darkMode ? Palette.darkest : Palette.lightest)};
   text-align: ${({center}) => (center ? 'center' : 'auto')};
   flex-wrap: wrap;
@@ -66,14 +80,17 @@ export const ListHeader: MemoizedStyledElement = React.memo(styled(BaseText)`
 
 ListHeader.displayName = 'ListHeader';
 
-export const SearchBox: MemoizedStyledElement = React.memo(withProps()(styled(TextInput))`
+export const SearchBox: MemoizedStyledElement = React.memo(withProps()(
+  styled(TextInput),
+)`
   width: 100%;
   border-width: 2px;
   border-radius: 6px;
   padding: 10px;
   margin-bottom: 15px;
   margin-top: 15px;
-  font-size: ${({size}: ({size: string}) ) => (size !== undefined ? size + 'px' : '24px')};
+  font-size: ${({size}: {size: string}) =>
+    size !== undefined ? size + 'px' : '24px'};
   border-color: ${Palette.darkest};
 `);
 
@@ -101,3 +118,28 @@ export const Button: MemoizedStyledElement = React.memo(
 );
 
 Button.displayName = 'Button';
+
+export const HeaderContainer: MemoizedStyledElement = React.memo(
+  styled(View)`
+    padding-top: ${Platform.OS === 'ios' ? StatusBar.currentHeight : '0px'};
+    min-height: ${Header.HEIGHT + 'px'};
+  `,
+);
+
+HeaderContainer.displayName = 'HeaderContainer';
+
+export const HeaderContent: MemoizedStyledElement = React.memo(
+  styled(View)`
+    min-height: ${Header.HEIGHT + 'px'};
+    background-color: ${Palette.brand};
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-horizontal: 10px;
+  `,
+);
+
+HeaderContent.displayName = 'HeaderContent';
+
+
+

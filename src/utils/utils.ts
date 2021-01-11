@@ -1,3 +1,4 @@
+import { NavigationScreenProp } from 'react-navigation';
 import {Breed} from '../models';
 
 /**
@@ -49,3 +50,13 @@ export const convertDogsArray = (dogs: string[]): Breed[] => {
 };
 
 export const hasData = (arr: any[]) => !arr.includes(undefined);
+
+export const findRouteNameFromNavigator = (
+  navigation: NavigationScreenProp<any>
+) => {
+  let route = navigation.state;
+  while (route.routes) {
+    route = route.routes[route.index];
+  }
+  return route;
+};

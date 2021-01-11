@@ -17,13 +17,14 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {hasData} from '../utils/utils';
 import styles from '../styles/base';
 import { LoadingIndicator } from '../components';
+import { NavigationScreenProp } from 'react-navigation';
 
 const Image = createImageProgress(FastImage);
 
 interface SubBreedsScreenProps {
   clearCachedSubBreed: (selectedBreedFromParam: string) => void;
   getSubBreedImage: (selectedBreedFromParam: string) => void;
-  navigation: any;
+  navigation: NavigationScreenProp<any>;
   images: string[];
   isLoading: boolean;
   error: string;

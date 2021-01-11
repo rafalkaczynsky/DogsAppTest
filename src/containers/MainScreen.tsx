@@ -20,13 +20,14 @@ import {
 import {getAllDogs} from '../modules/dogs';
 import {Breed} from '../models';
 import styles from '../styles/base';
+import { NavigationScreenProp } from 'react-navigation';
 
 interface MainScreenProps {
   fontSize: number;
   dogs: Breed[];
   isLoading: boolean;
   error: string;
-  navigation: any;
+  navigation: NavigationScreenProp<any>;
   getAllDogs: () => Promise<string[]>;
 }
 // This component is a home screen of our App.

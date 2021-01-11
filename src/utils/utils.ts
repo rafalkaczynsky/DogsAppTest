@@ -1,5 +1,11 @@
 import {Breed} from '../models';
 
+/**
+ * @param {subBreeds} string[] list of all subBreeds images saved
+ * @param {subBreed} string selected sub breed name
+ * This method is removing all items form subBreeds list that are related
+ * to selected sub breed
+ */
 export const removeImagesBySubBreed = (
   subBreeds: string[],
   subBreed: string,
@@ -10,9 +16,18 @@ export const removeImagesBySubBreed = (
     return !imageUrl.includes(mainBreed);
   });
 
+/**
+ * @param {subBreed} string selected sub breed name
+ * This method is transforming sub breed name to the name needed for API calls
+ */
 export const transformSubreedName = (subBreed: string): string =>
   subBreed.trim().split(' ')[1] + '/' + subBreed.trim().split(' ')[0];
 
+/**
+ * @param {dogs} string[] selected sub breed name
+ * This method is method converts dogs array fetched from API
+ * to Array needed in APP
+ */  
 export const convertDogsArray = (dogs: string[]): Breed[] => {
   const dogsArray: string[] = Object.keys(dogs);
 

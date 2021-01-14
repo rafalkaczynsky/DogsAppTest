@@ -5,7 +5,7 @@ import React, {
   ReactElement,
   useCallback,
 } from 'react';
-import {View, RefreshControl,TouchableOpacity, StatusBar} from 'react-native';
+import {View, RefreshControl, TouchableOpacity, StatusBar} from 'react-native';
 import {connect} from 'react-redux';
 import {RootState} from '../modules/rootState';
 import {GroupedBreedList, LoadingIndicator} from '../components';
@@ -16,11 +16,14 @@ import {
   SearchBox,
   MainContainer,
   BaseContainer,
+  Container,
+  BaseText,
 } from '../components/Core';
 import {getAllDogs} from '../modules/dogs';
 import {Breed} from '../models';
 import styles from '../styles/base';
-import { NavigationScreenProp } from 'react-navigation';
+import {NavigationScreenProp} from 'react-navigation';
+import {SectionList} from 'react-native';
 
 interface MainScreenProps {
   fontSize: number;
@@ -29,18 +32,43 @@ interface MainScreenProps {
   error: string;
   navigation: NavigationScreenProp<any>;
   getAllDogs: () => Promise<string[]>;
+  filteredDogs: Breed[];
 }
 // This component is a home screen of our App.
 // MainScreen is displaying list of dogs grouped by breed with its subreeds
 const MainScreen = (props: MainScreenProps): ReactElement => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [filteredDogs, setFilteredDogs] = useState([]);
 
   const {getAllDogs, isLoading, dogs, navigation, fontSize} = props;
 
   useEffect(() => {
-    !dogs.length ? getAllDogs() : null;
-  }, []);
+    if (!dogs.length) {
+      getAllDogs();
+    } else {
+      const newFilteredDogs: Breed[] | any = getFilteredDogs();
+      setFilteredDogs(newFilteredDogs);
+    }
+  }, [searchTerm]);
+
+  const getFilteredDogs = (): Breed[] =>
+    dogs.reduce((result: Breed[], sectionData: Breed) => {
+      const {breedName, data} = sectionData;
+
+      const filteredData = data.filter((item: string) =>
+        item.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+
+      if (filteredData.length !== 0) {
+        result.push({
+          breedName,
+          data: filteredData,
+        });
+      }
+
+      return result;
+    }, []);
 
   /**
    * This method is handling processes when onRefresh is pulled down
@@ -74,12 +102,12 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     <SearchBox
       size={fontSize}
       placeholder={'Search for dogs ...'}
-      underlineColorAndroid={"transparent"}
+      underlineColorAndroid={'transparent'}
       onChangeText={(txt: string) => setSearchTerm(txt)}
     />
   );
 
-  const renderSubBreadItem = ({item}: {item: string}): ReactNode => (
+  const renderSubBreadItem = ({item}: {item: string}) => (
     <TouchableOpacity onPress={() => handleSubBreedPressed(item)}>
       <SectionItem size={fontSize}>{item}</SectionItem>
     </TouchableOpacity>
@@ -93,34 +121,39 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
     <SectionHeader size={fontSize}>{breedName}</SectionHeader>
   );
 
-  const renderItemSeparator = (): ReactNode => (
-    <View style={styles.itemSeparator} />
-  );
+  const renderItemSeparator = () => <View style={styles.itemSeparator} />;
 
-  const renderListHeader = (): ReactNode => (
+  const renderListHeader = () => (
     <ListHeader size={fontSize}>Results: </ListHeader>
   );
 
   const renderList = (): ReactElement => (
     <BaseContainer>
-      <GroupedBreedList
-        styles={{backgroundColor: 'yellow'}}
-        groupedDogs={dogs}
-        searchTerm={searchTerm}
-        renderSectionHeader={renderBreedHeader}
-        renderItem={renderSubBreadItem}
-        keyExtractor={keyExtractor}
-        initialNumToRender={20}
-        ItemSeparatorComponent={renderItemSeparator}
-        ListHeaderComponent={renderListHeader}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
+      {filteredDogs.length === 0 ? (
+        <Container>
+          <BaseText size={18} darkMode center>
+            No results :(
+          </BaseText>
+        </Container>
+      ) : (
+        <SectionList
+          styles={{backgroundColor: 'yellow'}}
+          sections={filteredDogs}
+          renderSectionHeader={renderBreedHeader}
+          renderItem={renderSubBreadItem}
+          keyExtractor={keyExtractor}
+          initialNumToRender={20}
+          ItemSeparatorComponent={renderItemSeparator}
+          ListHeaderComponent={renderListHeader}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
+      )}
     </BaseContainer>
   );
 
-  const renderLoading = (): ReactElement => <LoadingIndicator/>
+  const renderLoading = (): ReactElement => <LoadingIndicator />;
 
   return (
     <MainContainer>

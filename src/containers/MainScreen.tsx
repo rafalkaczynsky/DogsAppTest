@@ -50,7 +50,7 @@ const MainScreen = (props: MainScreenProps): ReactElement => {
       const newFilteredDogs: Breed[] | any = getFilteredDogs();
       setFilteredDogs(newFilteredDogs);
     }
-  }, [searchTerm]);
+  }, [searchTerm, dogs]);
 
   const getFilteredDogs = (): Breed[] =>
     dogs.reduce((result: Breed[], sectionData: Breed) => {

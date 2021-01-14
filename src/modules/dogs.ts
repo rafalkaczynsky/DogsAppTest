@@ -97,7 +97,7 @@ export default function (
       case DogsTypeKeys.GET_SUBBREED_IMAGE_SUCCESS:
         draft.isLoadingImage = false;
         draft.error = '';
-        draft.subBreeds = [...draft.subBreeds, action.payload];
+        draft.subBreeds = [...draft.subBreeds, ...action.payload];
         return draft;
       case DogsTypeKeys.GET_SUBBREED_IMAGE_FAILED:
         draft.isLoadingImage = false;

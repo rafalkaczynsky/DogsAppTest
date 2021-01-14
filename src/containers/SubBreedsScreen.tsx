@@ -36,6 +36,7 @@ interface SubBreedsScreenProps {
 // SubBreedsScreen  is displaying random 2 images of seleceted sub breed
 const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
   const [subBreedImages, setSubBreedImages] = useState<string[]>([]);
+  
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const {
     clearCachedSubBreed,

@@ -23,7 +23,7 @@ const Image = createImageProgress(FastImage);
 
 interface SubBreedsScreenProps {
   clearCachedSubBreed: (selectedBreedFromParam: string) => void;
-  getSubBreedImage: (selectedBreedFromParam: string) => void;
+  getSubBreedImage: (selectedBreedFromParam: string) => Promise<any>;
   navigation: NavigationScreenProp<any>;
   images: string[];
   isLoading: boolean;
@@ -81,21 +81,8 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
    * Response handler for fetching images from API
    * Is saving fetched images to screen state if they're exist
    */
-  const handleGetImageResponse = (values: any[]): void => {
-    const errorMsg = error || 'Something went wrong';
-    let newImages: string[] = [];
-
-    if (hasData(values)) {
-      values.forEach((val: {status: string; message: any}) => {
-        if (val && val.status === 'success') {
-          let newImage = val.message;
-          newImages = [...newImages, newImage];
-        }
-      });
-      setSubBreedImages(newImages);
-    } else {
-      alert(errorMsg);
-    }
+  const handleGetImageResponse = (message: any[]): void => {
+    setSubBreedImages(message);
     setRefreshing(false);
   };
 
@@ -104,12 +91,9 @@ const SubBreedsScreen = (props: SubBreedsScreenProps): ReactElement => {
    * This method is fetching images from API
    */
   const getNewImagesForSubBreed = (selectedBreedFromParam: string): void => {
-    const getFirstSubreedImage = getSubBreedImage(selectedBreedFromParam);
-    const getSecondSubreedImage = getSubBreedImage(selectedBreedFromParam);
-
-    Promise.all([getFirstSubreedImage, getSecondSubreedImage])
+    getSubBreedImage(selectedBreedFromParam)
       .then(handleGetImageResponse)
-      .catch((err) => {
+      .catch((error) => {
         alert(error);
         setRefreshing(false);
       });

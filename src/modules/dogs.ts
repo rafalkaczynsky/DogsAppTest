@@ -124,7 +124,7 @@ export const getSubBreedImage = (subBreed: string) => (dispatch: any) => {
           payload: json.message,
         });
       }
-      return json;
+      return json.message;
     })
     .catch((error) => {
       dispatch({
